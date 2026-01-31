@@ -1,0 +1,1555 @@
+Received 17 October 2024, accepted 9 December 2024, date of publication 12 December 2024, date of current version 20 December 2024.
+
+An Algorithmic Trading Approach Merging
+Machine Learning With Multi-Indicator
+Strategies for Optimal Performance
+
+NARONGSAK SUKMA 1 AND CHAKKRIT SNAE NAMAHOOT 1,2
+1Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand
+2Center of Excellence in Nonlinear Analysis and Optimization, Faculty of Science, Naresuan University, Phitsanulok 65000, Thailand
+Corresponding author: Chakkrit Snae Namahoot (chakkrits@nu.ac.th)
+This work was supported in part by the Faculty of Science, Naresuan University, and in part by the Faculty of Science, Naresuan University
+
+
+ABSTRACT This study investigates the integration of machine learning techniques with multi-indicator
+strategies in algorithmic trading to overcome the limitations of traditional trading methods. As financial
+markets become increasingly complex and volatile, innovative approaches are essential to improve predictive
+accuracy and adaptability. This research aims to develop an algorithmic trading framework that dynamically
+selects relevant indicators to optimize trading performance. Researchers propose a flexible and computationally efficient model that takes advantage of advanced machine learning algorithms alongside multiple
+technical indicators, designed to adapt to changing market conditions. An empirical analysis evaluates the
+effectiveness of this approach against traditional trading indicators. The results demonstrate that the proposed
+algorithm achieved an impressive total return of 901%, significantly outperforming traditional indicators
+such as Moving Average (MA), Relative Strength Index (RSI), Moving Average Convergence Divergence
+(MACD), Bollinger Bands, On-Balance Volume (OBV), and Ichimoku. Furthermore, the model maintained
+a high win rate during the backtesting, showcasing its robustness under various market conditions. These
+findings highlight the potential of hybrid strategies that combine machine learning with technical analysis.
+This research emphasizes the need for adaptive trading models that can respond to the dynamic nature of
+financial markets. The integration of machine learning with multi-indicator strategies is shown to enhance
+trading performance. Future work should focus on improving the interpretability of the model and exploring
+diverse datasets to further enhance the effectiveness of algorithmic trading methodologies.
+
+
+INDEX TERMS Undervalued stocks, algorithmic approaches, machine learning, predictive modeling,
+financial markets
+
+
+I. INTRODUCTION
+In the complex realm of investment strategies, the quest
+to maximize returns while mitigating risks has perpetually
+preoccupied institutional investors. Central to this pursuit is
+the identification of undervalued stocks, a pursuit fraught
+with complexities and challenges, but offering tantalizing prospects of outperforming market benchmarks and
+delivering superior returns over the long term. Traditional
+approaches to the valuation of stocks, grounded in fundamental analysis and market sentiment, have long served as the basis for investment decision-making processes [1], [2], [3].
+However, the dynamic and multifaceted nature of financial
+markets, characterized by volatility, uncertainty, and information asymmetry, requires a more nuanced and data-driven
+approach to identifying undervalued stocks. It is within this
+evolving landscape that the convergence of machine learning
+(ML) methodologies and investment strategies presents a
+compelling narrative of innovation and opportunity [4], [5],
+[6]. Historically, investment decisions have been guided by
+human intuition and analytical frameworks based on historical data and financial metrics [7]. Although these approaches
+have been successful, they are inherently limited by the biases
+and cognitive constraints inherent in human decision-making processes. In contrast, ML algorithms offer the promise of
+transcending these limitations by systematically analyzing
+vast amounts of data, identifying patterns and trends [8], and
+generating predictive models capable of making informed
+autonomous decisions [9]. Financial markets have experienced profound changes in recent years, largely driven by
+rapid technological advancements and the proliferation of
+data. As a result, traders and investors are increasingly faced
+with the challenge of navigating a complex and volatile environment. Traditional trading strategies, which often rely on
+fundamental and technical analysis, may struggle to adapt
+to the fast-paced dynamics of modern markets. This has
+led to a growing interest in algorithmic trading, a method
+that utilizes computer algorithms to execute trades based
+on predefined criteria. In this context, the integration of
+sophisticated analytical tools becomes essential to improve
+trading performance and decision-making. also, Algorithmic
+trading has gained traction due to its ability to process vast
+amounts of data and execute trades at high speeds, thereby
+democratizing market access. However, despite its advantages, many algorithmic trading models face limitations in
+predictive accuracy and adaptability. This raises critical questions about the effectiveness of existing strategies and the
+potential for improvement through innovative approaches.
+Consequently, this research aims to explore the integration
+of machine learning techniques with multi-indicator strategies to address these challenges. Additionally, to frame this
+exploration, the study poses two primary research questions:
+RQ1: How can the integration of machine learning with
+multi-indicator strategies enhance the predictive accuracy and
+performance of algorithmic trading models?
+RQ2: What impact does the use of a multi-indicator
+approach have on the interpretability and decision-making
+processes of traders using algorithmic trading systems?
+These questions are crucial to understanding the potential benefits of combining traditional technical analysis with
+modern computational techniques. To answer these questions, the research sets two key objectives. First, it aims to
+develop and evaluate a comprehensive framework that merges
+machine learning techniques with multi-indicator strategies,
+thereby improving the predictive accuracy and overall performance of algorithmic trading models. This objective is based
+on the recognition that traditional indicators, when enhanced
+through machine learning, can provide deeper insight into
+market trends and dynamics. Second, the study seeks to assess
+the interpretability of the proposed multi-indicator approach
+in algorithmic trading, offering insights that enhance traders’
+understanding of model predictions and decision-making
+processes. This objective is particularly important as it
+addresses the often-criticized nature of machine learning models, which can hinder their adoption among
+practitioners.
+The significance of this research lies in its potential to
+contribute to the existing body of knowledge on algorithmic
+trading. By leveraging a multi-indicator approach, the study
+aims to provide valuable insights for both individual and
+institutional investors, ultimately enhancing the effectiveness
+of their trading strategies. Furthermore, the findings will offer
+a solid foundation for future research in the field, driving
+innovation in algorithmic trading methodologies.
+As the financial landscape continues to evolve, the need
+for adaptable and resilient trading strategies becomes increasingly critical. Integration of machine learning with traditional
+technical indicators represents a promising way to achieve
+this goal. By addressing the identified gaps in the existing literature and leveraging multi-indicator analysis, this research
+has the potential to drive significant advancements in algorithmic trading practices.
+The remainder of this paper is structured as follows.
+Section II provides a literature review on algorithmic trading,
+machine learning applications, and multi-indicator strategies.
+Section III describes the research methodology, including
+data collection, model development, and evaluation metrics.
+Section IV presents the results of the empirical analysis,
+highlighting the performance of the proposed framework.
+Section V discusses the implications of the findings for
+traders and investors, while Section VI concludes the article
+and suggests avenues for future research.
+
+
+II. RELATED WORK
+A. TECHNICAL ANALYSIS
+The existing body of research on algorithmic trading has
+made significant progress in integrating machine learning
+techniques with technical indicators, but several key gaps
+remain. Reinforcement Learning (RL) and BiLSTM models
+have demonstrated improved predictive precision, but these
+approaches often rely on a limited set of technical indicators, which can result in model complexity and potential
+overfitting [10], [11]. Furthermore, deep learning models,
+while effective, require significant computational resources,
+making their application in real-time trading systems challenging [12], [13]. Hybrid models that combine technical and
+fundamental analysis [14] or sentiment analysis [15] show
+promise, but their validation is often limited to specific markets or asset classes, restricting their broader applicability.
+Furthermore, studies indicate that high predictive accuracy
+does not always lead to high profitability, particularly in
+models that use sentiment and numerical data. There is a clear
+need for models that optimize profitability while maintaining
+accuracy. Furthermore, existing models, such as RL integrated with technical or sentiment analysis [16], often lack
+adaptability to rapidly changing market dynamics, a crucial
+aspect for real-world trading applications. Although some
+research explores hybrid approaches [17], there is untapped
+potential in combining various machine learning techniques
+and multiple indicators to create more robust and dynamic
+models. Addressing these gaps, the research proposed in this
+article aims to develop a more adaptive, computationally feasible, and profitable trading system, leveraging the strengths
+of multiple models and indicators to improve both prediction
+accuracy and profitability.
+
+
+B. MULTI-INDICATOR APPROACHES
+The current literature on algorithmic trading with machine
+learning and multi-indicator strategies highlights both
+advancements and limitations across various studies.
+A framework combining multi-indicator feature selection
+(MICFS) with Convolutional Neural Networks (CNN) has
+been shown to enhance prediction accuracy and trading
+returns by selecting relevant indicators and reducing data
+complexity [18]. While the MICFS-CNN approach shows
+promising 60.02% accuracy and 31.07% returns, the reliance
+on fixed indicators limits its adaptability to different stock
+indices and market conditions. This flexibility gap is critical, as different market environments may require dynamic
+indicator selection methods for optimal results. Furthermore,
+algorithms that use multiple indicators, such as RSI, EMA,
+MACD and VWAP, have also been investigated, showing that
+the combination of various indicators improves performance
+and reduces risks [19].
+However, most of these studies limit their exploration of
+machine learning models, which could further enhance the
+effectiveness of these strategies in different contexts. For
+example, while Python script can make a strategy development, a deeper exploration of the integration of machine
+learning with traditional indicators is necessary to optimize
+results, especially in volatile markets [20]. Furthermore,
+a novel approach in the blockchain space has introduced a
+method to improve notary node participation and resource
+allocation, although this research is not specific to algorithmic trading [21]. However, its credit evaluation algorithm
+presents a useful parallel for resource allocation, a concept that could inspire similar advances in cross-chain asset
+trading models or even trading indicators in stock markets.
+Furthermore, another important area of research focuses on
+multi-indicator trend analysis, which demonstrates how technical indicators such as RSI, EMAs, MACD, and Bollinger
+Bands can improve trading profitability and forecast accuracy [22]. Although this study addresses the need for
+systematic strategies, it points out that risks of overfitting
+and potential data biases still challenge reliable long-term
+predictions. Machine learning methods could mitigate some
+of these issues by improving the feature selection process and
+adapting to diverse data sources, but these techniques remain
+underexplored in conjunction with traditional financial indicators.
+Furthermore, the introduction of multiparametric models
+that incorporate factors such as energy (E) and entropy (S)
+into trading decision variables has also been shown to
+reduce noise and improve reliability in market analysis [23].
+Although this approach emphasizes market behavior and
+dynamic decision-making, it lacks comprehensive empirical
+validation, and the complexity of integrating multiple indicators can lead to false signals. More research is needed
+to empirically validate how such models perform under
+different market conditions. However, a more recent study
+proposes using multi-indicator CNNs for trading signal
+predictions, outperforming traditional models in terms of accuracy [24]. The findings suggest that the combination
+of machine learning techniques with multiple indicators has
+significant potential to improve trading efficiency.
+However, the complexity requires extensive computational
+resources and its adaptability under different market conditions requires further exploration [25], [26], [27], [28].
+In addition, a study using SPA tests and in-sample and outof-sample tests in ten technical trading rules from futures
+markets found that the best-performing rules could outperform buy-and-hold strategies under certain conditions [29].
+This research highlights the profitability of technical analysis, yet its generalizability across different markets and
+conditions is limited, emphasizing the need for more adaptable and machine learning-based methods. While significant
+progress has been made in algorithmic trading by combining technical indicators and machine learning techniques,
+key gaps remain. Current approaches are often constrained
+by fixed indicator selection, computational complexity, and
+limited adaptability in diverse market environments. This
+proposed research aims to address these gaps by developing
+a flexible and computationally efficient model that dynamically selects the most relevant indicators. This model will aim
+to optimize performance under different market conditions,
+thus contributing to the advancement of algorithmic trading
+research.
+
+C. MACHINE LEARNING IN FINANCE
+The application of machine learning (ML) and algorithmic
+trading strategies has garnered significant attention, with
+numerous studies exploring various approaches to improve
+predictive accuracy and decision-making in financial markets. However, key gaps remain in optimizing multi-indicator
+strategies, integrating diverse financial data sources, and
+ensuring scalability across different market conditions. For
+example, hybrid approaches that combine machine learning
+with network analysis have shown promise in predicting
+financial distress by leveraging company correlation networks [30]. However, challenges related to the complexity of
+network construction and limited sector applicability persist.
+In the realm of green finance, ML models have indicated that
+digital finance can promote sustainable development [31], but
+the mechanisms through which this occurs remain underexplored, limiting the generalizability across various industries.
+Several studies have investigated the potential of combining
+machine learning techniques with financial fraud detection [32], cybersecurity [33], and portfolio management [27],
+[34], [35]. Supervised ML approaches have proven to be
+effective in identifying financial fraud [32], while knowledge
+distillation frameworks have been proposed to defend against
+membership inference attacks [33].
+However, these models often rely on specific datasets,
+which may not capture the dynamics of the broader financial ecosystem. Furthermore, in portfolio management, deep
+reinforcement learning combined with quantum finance principles [36], [37] has shown potential in optimizing trading strategies. However, the complexity of implementation and
+overfitting issues suggest that further research is needed
+to enhance the adaptability and robustness of the model
+under different market conditions. Furthermore, explainable
+AI (XAI) techniques have been proposed to improve transparency in financial decision making [38], but comprehensive
+studies on their applications in algorithmic trading are lacking. Although various ML algorithms have been used to
+improve trading predictions [39], the focus on traditional
+methods limits the exploration of advanced techniques such
+as deep learning, which could improve predictive accuracy.
+In particular, neural networks have outperformed traditional
+models in the pricing of real estate derivatives [40] and
+statistical arbitrage strategies [41], but there are still gaps
+in addressing prediction noise and improving feature selection. Bayesian optimization and support vector regression
+have been applied to portfolio returns [42], but the exclusion of endogeneity issues underscores the need for more
+robust models capable of handling complex financial data.
+In addition, incorporating natural language processing (NLP)
+techniques into algorithmic trading is another promising
+avenue. One study successfully used NLP to analyze the temporal dimension of financial news, achieving high precision
+and recall [43].
+However, reliance on labeled data sets limits the applicability to other contexts without similar data. Machine
+learning techniques have also been used to detect risk factors
+in rural financial environments [44] and identify arbitrage
+opportunities in quantitative finance [41]. However, both
+studies highlight the need for comprehensive datasets and
+feature engineering to capture the complexities of the financial market. This proposed research seeks to address these
+existing gaps by integrating various ML techniques and
+trading indicators to optimize performance under various
+market conditions. Unlike prior studies that focus on single methodologies or limited datasets, this research aims to
+provide a comprehensive framework for optimizing algorithmic trading performance through the integration of ML with
+multi-indicator strategies.
+
+
+D. INTEGRATION OF MACHINE LEARNING AND
+TECHNICAL ANALYSIS
+The intersection of machine learning (ML) and technical
+analysis in algorithmic trading represents a transformative
+frontier within the financial industry, yet the existing literature reveals several critical gaps that underscore the need
+for further research. Studies show that ML algorithms, such
+as logistic regression, support vector machines, and neural
+networks, significantly improve stock selection capabilities
+compared to traditional models [45], [46], [47]. For example, empirical analyses utilizing historical data from major
+stock indices illustrate that while these models achieve commendable predictive accuracy, their long-term viability in
+diverse market conditions remains unexplored [48], [49].
+This gap is particularly concerning given the dynamic nature
+of financial markets, which are influenced by a variety of factors, including macroeconomic trends and investor
+sentiment [11], [50]. Furthermore, research incorporating
+sentiment analysis into predictive models shows promise
+in improving accuracy, but the scalability and robustness
+of these methods in different asset classes warrant further
+investigation [51], [52]. Although approaches utilizing longshort-term memory (LSTM) networks have demonstrated
+impressive performance, their application to individual stock
+movements remains largely unaddressed, indicating a crucial
+need for user-friendly systems that enhance interpretability
+and real-world applicability [53], [54]. Furthermore, studies
+that integrate reinforcement learning (RL) with sentiment
+analysis highlight its potential to optimize trading decisions
+but suggest the need to explore various sentiment tools for
+broader applicability [55], [56]. Additionally, the effectiveness of Belief Rule Based Expert Systems (BRBES) in
+stock price prediction outperforms traditional techniques, but
+there is a lack of clarity on the influence of varying market
+conditions, which requires comparative analyzes to validate their efficacy [57]. Furthermore, the promising results
+obtained from combining LSTM models with traditional trading strategies emphasize the need for continuous refinement
+and deeper exploration of macroeconomic impacts [58], [59].
+Heuristic search strategies combined with classification algorithms also indicate success in identifying relevant indicators
+for stock returns, but the need for innovative predictors to
+enhance future models persists [60].
+However, many studies do not address how model complexity and market anomalies affect the performance of
+trading strategies [61]. By merging machine learning with
+multi-indicator strategies, this research seeks to fill these
+gaps, providing a comprehensive framework that not only
+optimizes trading performance, but also enhances understanding of model behavior in fluctuating market conditions.
+Thus, the proposed research is crucial to advance algorithmic
+trading methodologies, address identified shortcomings and
+pave the way for more effective trading strategies in the
+financial sector.
+
+
+A. STEP 1: DATA ACQUISITION
+In Step 1, focus on data acquisition, which is crucial to build
+a robust algorithmic trading strategy. This step involves collecting historical and real-time data to create a comprehensive
+data frame, specifically targeting the S&P 500 Index [62].
+The quality and precision of these data significantly influence
+the performance of subsequent analytical steps, including feature engineering and model training. By Objectives of Data
+Acquisition are first, Historical Data: To analyze past performance and identify trends or patterns that can inform future
+trading strategies. Second, Real-Time Data: To make timely
+trading decisions based on the latest market conditions.
+Lastly, Comprehensive Dataset to ensure a well-rounded
+dataset that includes various attributes, such as price, volume,
+and market conditions that the format has present in Table 1.
+
+TABLE 1. Description of data.
+
+later anupuren
+
+
+a) Data Acquisition Process
+i) Define the Stock Universe
+(1) Identify the stocks that are part of the S&P
+500 index.
+SP500 = {sp1,sp2,sp3, . . . ,spn
+}
+spi
+represents an individual stock in the S&P 500.
+ii) Historical Data Retrieval
+(1) Use the Yahoo Finance API to obtain historical
+stock price data for each stock in the S&P 500.
+(2) This includes daily price data over a specific period (for example, the last 10 years,
+2010-2023).
+iii) Data fields to Retrieve:
+(1) Open Price: The price at the start of the trading
+day.
+(2) Close Price: The price at the end of the trading
+day.
+(3) High Price: The maximum price during the trading day.
+(4) Low Price: The minimum price during the trading day.
+(5) Volume: The number of shares traded during the
+day.
+iv) Data Structuring:
+(1) Combine historical and real-time data into a
+structured format, such as a data frame.
+(2) This data frame will serve as the foundation
+for subsequent steps in the trading strategy. The
+structure of the data frame may include the
+following:
+DataFrame = {Date, Stock, Open, High, Low,Close,
+Volume}
+
+
+B. STEP 2: INITIATE NOVEL FEATURE ENGINEERING WITH
+UNDERVALUED STOCKS CALCULATION
+In this enhanced step of feature engineering, the goal is to
+identify undervalued stocks using a combination of technical
+indicators and financial ratios. The process ensures that the
+stock meets both value-investment principles and technical
+analysis criteria before passing on as undervalued.
+
+a) Formula for Undervalued Stocks (US):
+US=
+
+
+
+if > S
+1
+150
+X
+150
+i=1
+ai >
+1
+200
+X
+200
+i=1
+ai
+∧
+1
+200
+X
+200
+i=1
+ai
+is trending up for at least 1 month
+∧S >
+1
+50
+X
+50
+i=1
+ai >
+1
+150
+X
+150
+i=1
+ai ∧ S >
+1
+50
+X
+50
+i=1
+ai
+∧S >L52LowX1.3 ∧ S > H52highX0.75
+∧passes based on financial ratios and principles
+where:
+S = current price of the stock
+ai = stock price for respective day i
+L52Low = 52-week low price of the stock
+H52high = 52-week high price of the stock
+b) Financial Ratios and Principles Check for each stock in
+the a), apply financial ratio checks: If the stock passes
+the following criteria:
+i) PEratio > MinPE
+ii) PBratio < MaxPB
+iii) Dividend Yield > Min Dividend Yield
+iv) Earnings Growth > min earnings growth
+v) Earnings Growth > min earnings growth
+vi) Earnings Growth > min earnings growth
+vii) Debt to Equity < max debt-to-equity
+viii) Price to Sales < max price-to-sales
+ix) Return on Equity > Min Return on Equity
+x) Return on Equity > Min Return on Equity
+xi) Price to Cash Flow > min price-to-cash-flow
+xii) Price to Cash Flow > min price-to-cash-flow
+xiii) Current ratio > Min current ratio
+xiv) Quick ratio > min quick ratio
+xv) Then move the stock to the final list of undervalued
+stocks.
+xvi) Otherwise, drop the stock.
+Output: The final list of selected undervalued stocks that meet
+both technical and financial criteria.
+
+
+C. STEP 4: MODEL TRAINING AND EVALUATION
+In this step, we focus on training the selected machine
+learning model using the identified indicators and the target variable, which represents the investment opportunities
+(e.g., undervalued stocks). The model learns to recognize
+patterns and relationships within the data to make predictions.
+Following the training process, we evaluate the model performance using various metrics, including accuracy, precision,
+recall, F1 score, and error measures such as Mean Absolute
+Error (MAE) and Root Mean Squared Error (RMSE). These
+metrics provide insights into the model’s effectiveness in
+generating reliable trading signals and its ability to generalize
+to unseen data, ultimately guiding investment decisions.
+a) Model Training:
+i) The model is trained using the selected indicators and
+the target variable (e.g., undervalued stocks).
+ii) Let X be the matrix of selected indicators and y be
+the target variable.
+iii) The model can be represented as: y − f (X; θ) where
+f is the function that represents the model (eg, linear
+regression, decision tree) and are the parameters of
+the model.
+b) Model Evaluation Metrics:
+i) Accuracy = TP+TN
+TP+
++
+TN
+FP+FN
+ii) Precision = TP
+TP
++FP
+iii) Recall (Sensitivity) = TP
+TP
++FN
+iv) F1 Score = 2.
+Precision
+Precision
++
+·Recall
+Recall
+where:
+True positives (TP) = the number of correct positive
+predictions.
+True Negatives (TN) = The number of correct negative
+predictions.
+False positives (FP) = the number of incorrect positive
+predictions.
+False Negatives (FN) = The number of incorrect negative
+predictions.
+
+
+A. INITIATE FEATURE ENGINEERING WITH UNDERVALUED
+STOCKS
+This algorithm merges real-time data, historical stock prices,
+and financial metrics to identify undervalued stocks in the
+S&P 500 for algorithmic trading. The process begins by gathering historical data, such as open, closed, high, low prices,
+and volume, for individual S&P 500 stocks, using the Yahoo
+Finance API. The data are structured into a comprehensive
+data set for further analysis. The next step applies novel
+feature engineering by calculating ‘‘Undervalued Stocks’’
+(US) using a formula based on key technical indicators and
+stock price trends. Additional financial checks are performed
+to evaluate ratios such as PE, PB, dividend yield, and debt-toequity to ensure that stocks meet sound financial principles.
+Stocks passing both the technical and financial criteria are
+moved to a final ‘‘BUY’’ list, providing a solid foundation for
+trading decisions based on undervalued stock opportunities.
+This systematic approach optimizes performance and minimizes risk in trading, as shown in Algorithm 1.
+
+B. DATA PREPARATION
+This research performs a quantitative analysis of the S&P
+500 using data obtained from the Yahoo Finance API [63].
+The methodology used aligns with Algorithm 1 and Figure. 1,
+which begins by acquiring historical and real-time data to
+construct a data frame comprising SP500 stocks. Subsequently, the algorithm goes through a series of condition
+checks. First, it evaluates each stock against value investing
+criteria, considering parameters such as the Price-to-Earnings
+(PE) ratio and the Price-to-Book (PB) ratio in comparison to
+industry standards. Stocks that meet these criteria advance to
+the next stage, where technical analysis templates are applied,
+assessing metrics such as stock price trends and 52-week
+highs and lows. Those who pass this stage undergo scrutiny
+based on financial ratios and principles, including dividend
+
+Algorithm 1 Identify Undervalued Stocks
+Input: Real-time data, volume, market data, Fact Sheet (i.e.,
+book value, dividend yield)
+Step 1: Data Acquisition Process
+1. Define the stock universe.
+SP500 = {sp1, sp2, sp3, . .., sp_n} // Individual stocks in the
+S&P 500
+2. Historical Data Retrieval
+For each stock in SP500:
+a. Use the Yahoo Finance API to fetch historical stock price
+data for the last 10 years (2010-2023).
+b. Retrieve the following data fields:
+- Open Price
+- Close price
+- High price
+- Low Price
+Volume
+3. Data Structuring
+Combine historical and real-time data into a structured
+format:
+DataFrame = {Date, Stock, Open, High, Low, Close,
+Volume}
+Step 2: Initiate Novel Feature Engineering with Undervalued
+Stocks Calculation
+1. For each stock in DataFrame:
+a. Calculate Undervalued Stocks (US)
+2. Financial Ratios and Principles Check
+For each stock:
+a. Check the following financial ratios:
+- PE_ratio > Min PE
+- PB_ratio < Max PB
+- Dividend Yield > min dividend yield
+- Earnings growth > min earnings growth
+- Debt to Equity < max debt-to-equity
+- Price to Sales < max price-to-sales
+- Return on equity > min return on equity
+- Price-to-Cash Flow > Min Price-to-Cash Flow
+- Current ratio > min current ratio
+- Quick ratio > min quick ratio
+3. Final selection
+If the stock passes both technical and financial criteria:
+Move the stock to the final list of undervalued stocks.
+- Set the ‘BUY’ list of undervalued stocks.
+Else:
+- Reduce the stock.
+Output:
+The final ‘BUY’ list of selected undervalued stocks that meet
+both technical and financial criteria.
+
+
+yield, earnings growth, and debt-to-equity ratio. Stocks that
+meet all the conditions emerge as the final list of selected
+stocks. This comprehensive approach integrates fundamental analysis with technical indicators, improving the robustness
+of stock selection. Research collects data over a decade,
+from 2010 to 2023, ensuring a comprehensive analysis of
+market trends and stock performance. During this period,
+information is collected for approximately 500 companies
+listed on the S&P 500 index, offering a broad representation
+of the US stock market as presented in Table 2.
+Moreover, in the realm of quantitative analysis for stock
+selection, data preparation plays a crucial role in ensuring the
+robustness and reliability of the subsequent machine learning
+(ML) model [64] s. Algorithm 1, a crucial component of
+this process, sets the stage for identifying undervalued stocks
+based on predefined criteria. However, a common challenge
+in this context arises when the output of Algorithm 1 produces
+a relatively small number of selected stocks compared to
+the total pool, resulting in unbalanced sample sizes [65].
+This imbalance can significantly affect the performance of
+ML models, particularly in cases where the minority group
+(i.e. undervalued stocks) is underrepresented.
+To address this issue, the synthetic minority sampling
+technique (SMOTE) has emerged as a widely used sampling
+technique [66]. SMOTE is specifically designed to enhance
+the sample size of the minority group by generating synthetic
+instances that resemble existing minority class observations.
+By synthesizing new data points within the feature space,
+SMOTE effectively mitigates the imbalance and ensures adequate representation of undervalued stocks in the data set.
+Incorporating SMOTE into the data preparation pipeline for
+Algorithm 1 not only facilitates a more balanced distribution
+of samples, but also enhances the model’s ability to discern
+patterns and make accurate predictions. Therefore, by using
+SMOTE as a preprocessing step, researchers can improve the
+efficacy and reliability of ML models to identify undervalued
+stocks, ultimately contributing to more informed investment
+decisions.
+
+
+C. ADDITIONAL TECHNICAL INDICATOR FOR FEATURE
+SELECTION USING CORRELATION ANALYSIS
+Researchers refine the list of technical indicators by applying
+feature selection. This involves reducing a larger set of trading
+indicators, as shown in Table 3, to a smaller and more relevant
+set of relevant indicators. When dealing with a large set of
+technical indicators, some indicators may provide overlapping information or may not contribute significantly to the
+predictive ability of the model. This redundancy can lead to
+overfitting, where the model performs well on training data
+but fails to generalize to unseen data. Feature selection helps
+us to retain only the most informative and diverse indicators,
+which in turn enhances the accuracy and interpretability of
+the model.
+1) CORRELATION FORMULA
+The correlation between two trading indicators Ii and Ji
+is
+calculated using the Pearson correlation coefficient.
+Cij =
+CoV(Ii, Ij)
+σ (Ii).σ(Ij)
+
+TABLE 2. Data description to build ML model
+
+later anupuren
+
+TABLE 3. Technical indicators.
+
+later anupuren
+
+
+where:
+• Cij is the correlation coefficient between indicators Ii
+and Ji
+• CoV(Ii, Ij) is the covariance between Ii and Ji
+• σ (Ii) andσ(Ij) are the standard deviations Ii and Ji
+,
+respectively.
+The correlation coefficient Cij ranges from -1 to 1:
+• Cij = 1 indicates perfect positive correlation (the indicators move together),
+• Cij = −1 indicates perfect negative correlation (the
+indicators move in opposite directions),
+• Cij = 0 indicates no linear correlation.
+
+2) FEATURE SELECTION PROCESS
+i) Start with 20 Trading Indicators:
+(1) Initially, we consider a broad set of 20 technical
+trading indicators.
+I1, I2, I3, I4, I5, . . . ,I20
+ii) Calculate Pairwise Correlations
+We compute the pairwise correlation between each pair
+of indicatorsIi and Ji
+. This results in a correlation matrix,
+which shows the correlation coefficients for every pair of
+indicators
+iii) Set a correlation threshold:
+We define a correlation threshold, typically threshold =
+0.75. If the correlation coefficient between two indicators Cij > 0.75, they are highly correlated, and one of
+the indicators is deemed redundant.
+iv) Select the final indicators:
+After applying the correlation analysis, we are left with a
+smaller subset of small indicators that are not correlated
+and provide the most relevant information to predict
+stock movements.
+v) The final set of selected indicators:
+I1, I5, I6, I10, I15, I18 = Moving Averages, Relative
+Strength Index (RSI), Moving Average Convergence
+Divergence, Bollinger Bands, On-Balance Volume
+(OBV), Ichimoku Cloud
+
+These indicators are diverse and capture different aspects
+of the behavior of the stock price, ensuring that the model
+has a well-rounded set of training features. Combining the
+MA20_MA50, RSI, MACD, Bollinger bands, OBV, and
+Ichimoku indicators provides a well-rounded trading strategy by leveraging the strengths of each tool as outlined in
+Table 4. MA20_MA50 shows the direction of the trend,
+RSI identifies overbought/oversold conditions, and MACD
+highlights momentum. Bollinger bands track volatility, OBV
+confirms trends through volume, and Ichimoku reveals support, resistance, and trend direction. Together, they offer a
+comprehensive market analysis for more informed trading
+decisions.
+
+(1) Moving Averages:
+(a) Simple Moving Average (SMA): =
+1
+n
+P
+n
+i=1 Closei
+(b) Exponential Moving Average (EMA): = α.Closet +
+(1 − α).EMAt−1,where α = n+
+2
+1
+(2) Relative Strength Index (RSI):
+(a) 1 i = Closei − Closei−1
+(b) Gaini = max(1 i, 0)
+(c) Lossi = max(−1 i, 0)
+(d) RS =
+average
+average
+(
+(
+Gain
+Lossn
+n
+)
+)
+(e) RSI = 100 - 1
+100
++RS
+
+TABLE 4. Pros and cons of the selected trading strategy.
+
+later anupuren
+
+(3) Moving Average Convergence Divergence (MACD)
+Oscillator:
+(a) MACD line: MACD =EMA12 -EMA26
+(b) Signal line: Signal =EMAMACD,signalperiod
+(c) MACD histogram: Histogram = MACD - signal
+(4) Bollinger Bands:
+(a) Middle Band (SMA): Middle Band =SMAn
+(b) Upper Band: Upper Band = Middle Band +κ.StdDev
+(c) Lower Band: Lower Band = Middle Band -κ.StdDev
+(5) On-Balance Volume (OBV):
+(a) OBVi = OBVi−1 + Volumei
+if Closei >Closei−1
+(b) OBVi = OBVi−1 − Volumei
+if Closei <Closei−1
+(6) Ichimoku Cloud:
+(a) Conversion Line: Conversion Line =
+maxhighn
+2
++minlown
+(b) Base Line: Base Line =
+maxhighm
+2
++minlowm
+(c) Leading Span A: LeadingSpanA =
+ConversionLine
+2
++BaseLine
+(d) Leading Span B: LeadingSpanB =
+maxhighz
+2
++minlowz
+(e) Leading Span: LeadingSpan = Close−y
+
+D. MACHINE LEARNING MODEL ASSORTMENT
+ALGORITHM
+Algorithm 2, This algorithm presents an integrated approach
+to stock price prediction using an assortment of machine
+learning models. It systematically applies various models: Gradient Boosting Machines (GBM), Support Vector
+Machines (SVM), Random Forest, Logistic Regression,
+Neural Networks (NN), Decision Tree, K-Nearest Neighbors (KNN) and Gaussian Naive Bayes—to historical and
+real-time stock data. Each model is trained on a subset of
+the data, evaluated using key performance metrics (Accuracy,
+Precision, Recall, and F1-Score), and compared to identify
+the optimal model for accurate stock predictions. By leveraging multiple machine learning techniques, this algorithm
+improves predictive performance and adapts to the complex
+dynamics of financial markets.
+
+
+
+Algorithm 2 Machine Learning Model Assortment
+Input:
+• Historical and real-time stock data X, Labels Y
+• Machine learning models: GBM, SVM, Random Forest,
+Logistic Regression, Neural Networks, Decision Tree,
+KNN, Gaussian Naive Bayes
+1: for each model in {GBM, SVM, Random Forest, Logistic Regression, NN, Decision Tree, KNN, Gaussian Naive
+Bayes} do
+2: for each stock i = 1 to m do
+3: Prepare training data Xtrain, test data Xtest , label sets
+Ytrain, Xtest
+4: Train the model on Xtrain, Ytrain
+5: Use the trained model to predict stock labels Y =
+model.predict (Xtest)
+6: Evaluate performance metrics: Accuracy, Precision,
+Recall, F1-Score
+7: Store the performance results for the model
+8: end for
+9: end
+10: Select the model with the best performance based on
+evaluation metrics.
+Output:
+• Trained models, evaluated performance metrics (Accuracy, Precision, Recall, F1-Score)
+• Output the trading signals for stocks Si where Si ∈ {1
+(Buy), -1 (Sell), 0 (Hold)}
+
+
+E. BACKTESTING
+Backtesting is essential to assess the effectiveness of a trading
+strategy by applying it to historical data [85], [86], [87].
+In this process, portfolio performance is assessed by measuring the gains or losses of each trade over time. The equity
+curve tracks the growth of the portfolio by updating with
+each calculated return. Key performance metrics, such as total
+return, maximum drawdown, and the Sharpe ratio, help gauge
+the strategy’s profitability, risk management, and consistency.
+This approach allows traders to fine-tune strategies before
+deploying them in real-world trading environments.
+• Portfolio Backtesting:
+◦ Portfolio Performance: Returnst = Positiont
+.
+(Closet − Closet−1)
+◦ Equity Curve: EquityCurvet = (1 + Returnst).
+EquityCurvet−1
+• Performance Metrics:
+◦ Total Return: TotalReturn =EquityCurven1
+◦ Maximum Drawdown: MaxDrawdown = min
+(
+EquityCurve
+EquityCurve
+cummax
+) – 1
+◦ Sharpe Ratio: SharpeRatio =
+√
+252. mean
+std(Returns
+(Returns
+)
+
+
+V. EXPERIMENTS
+The experiments in this study start by identifying undervalued
+stocks through both forward and backward testing methods.
+Backward testing uses historical data to simulate how the
+trading strategy would have performed in the past, while
+forward testing applies the strategy to a period outside the
+backtesting to ensure its predictive power in unseen data.
+This approach helps to validate the reliability of the feature
+engineering process in selecting undervalued stocks. Once
+the undervalued stocks are identified, the study proceeds
+to compare the performance of multiple machine learning
+models. Gradient Boosting Machines (GBM), Support Vector
+Machines (SVM), Random Forest, Neural Networks, and
+other algorithms are applied to determine the most effective
+model to predict stock performance. Models are trained and
+evaluated on the basis of their accuracy, precision, recall, and
+other relevant metrics.
+Finally, the performance of each model is presented using
+portfolio backtesting, where key performance indicators such
+as total returns, maximum drawdown, and Sharpe ratio are
+calculated. Additionally, performance metrics such as accuracy, precision, recall, and F1 score are evaluated to assess
+the predictive capacity of each model. This comprehensive
+evaluation helps determine the best machine learning model
+for optimizing trading strategies, offering robust portfolio
+performance in both past and future market conditions.
+
+
+A. BACKWARD TEST AND FORWARD TEST
+First, the backward test period, evaluated from January 1,
+2022, to December 31, 2022, assesses the model’s performance on historical data. Second, the forward test period,
+tracked from January 1, 2023, to December 31, 2023, monitors its performance on new data. Within the forward test
+period lies the test date of January 2023, allowing comparison of the model’s performance on January 2023 data to
+its historical performance. The table shows the performance
+of three stock indices, the S&P 500, the NASDAQ 100,
+and the Dow Jones, showing the number of components,
+components selected by the model, win / loss / neutral
+ratios, and cumulative returns for both the backward and
+forward test periods. The win/loss/neutral ratio signifies how
+often the model selections surpassed, lagged or matched the
+benchmark return, while the cumulative return reflects the
+total return of the model selections during the test periods, as shown in Table 5 and shows the forward test since
+Jan 2020 – June 2024 by DCA performance and recommended stocks overview in Table 6.
+
+
+B. IDENTIFYING UNDERVALUED STOCKS APPROACH TO A
+FEATURE ENGINEERING
+First, the S&P 500 was selected, which is one of the most
+important economic indexes in the United States. Comprising
+the 500 largest companies by market capitalization, the S&P
+500 accounts for around 80% of the total value of the US
+stock market. Developed by Standard & Poor’s, a subsidiary
+
+TABLE 5. Backward test and forward test.
+
+later anupuren
+
+FIGURE 1. S&P 500.
+
+later anupuren
+
+FIGURE 2. NASDAQ100.
+
+later anupuren
+
+FIGURE 3. Dow Jones.
+
+later anupuren
+
+of McGraw-Hill, in 1957, the S&P 500 is widely used as an
+indicator of the state of the American economy [88]. Our
+system filtered 503 stocks in the S&P 500 according to the
+
+TABLE 6. DCA performance and recommended stock overview
+
+later anupuren
+
+
+algorithm and produced four results. After conducting a yearlong test, it was found that the system had a 100% win rate.
+The cumulative return was calculated to be 50%. Furthermore, a forward test was performed, and it was discovered
+that the cumulative return was 13.72% if these four stocks
+were purchased on January 1, 2023, compared to their prices
+on January 31, 2023 as shown in Figure 1.
+Second, the researchers screened the NASDAQ 100, a large
+US growth stock index determined by market capitalization.
+The index reflects the profits of the leading U.S. corporations
+and is considered one of the world’s most important stock
+indices. The system filtered 100 stocks using the NASDAQ
+100 algorithm and produced five results, as shown in the
+figure. 2. A 100% win rate was found if these five stocks
+were purchased in January 2022 and compared to their prices
+in December 2022. The cumulative return was calculated
+to be 15.60%. A forward test was also performed, resulting in a cumulative return of 10.21%. The wind ratio was determined to be 4:1, or 80%. As shown in Figure. 3. Third,
+the researchers screened the Dow Jones, the oldest stock market index in the United States. The index is calculated using
+the prices of stable-performing companies and is considered
+a nationally recognized industry leader. Our system filtered
+30 stocks using the Dow Jones algorithm and produced three
+results. A 66% win rate, 33% draw rate, and 0% loss rate
+were found if these three stocks were purchased in January
+2022 and compared to their prices in December 2022. A forward test was performed, and the win rate was found to be
+66%, the draw rate was 33%, and the loss rate was 0%. The
+cumulative return was calculated to be Dow Jones 4.62% and
+2.36% for the test and the forward test, respectively.
+
+C. ASSORTMENT OF MACHINE LEARNING
+This research explores a variety of machine learning (ML)
+models to improve the identification of undervalued stocks, presenting readers with a comprehensive evaluation of their
+efficacy and practical utility. By scrutinizing multiple models,
+each characterized by unique strengths and limitations, this
+study offers crucial insights for judicious model selection tailored to specific requirements. Gradient Boosting Machines
+(GBM) emerge as a standout performer, showcasing impressive metrics across the board, with an accuracy of 0.731,
+precision of 0.74, recall of 0.73, and F1-score of 0.72. The
+GBM ensemble approach and the ability to handle complex
+relationships make it a robust choice for predictive modeling.
+Support Vector Machines (SVM) and Random Forest display
+comparable accuracy, with SVM demonstrating superior precision, while slightly lag in recall and F1 score compared
+to Random Forest. SVM achieved an accuracy of 0.687,
+a precision of 0.71, a recall of 0.69, and an F1 score of
+0.67, while Random Forest achieved an accuracy of 0.687,
+a precision of 0.68, a recall of 0.69, and an F1 score of 0.66.
+This underscores the nuanced trade-offs inherent in classification accuracy optimization. Logistic regression strikes a
+balance between simplicity and performance, achieving an
+accuracy of 0.678, with precision, recall, and F1 score hovering around 0.68 and 0.67 respectively. Neural networks (NN)
+offer flexibility in the capture of intricate relationships, albeit
+with a slightly reduced accuracy rate of 0.662. Decision trees
+offer interpretability, but may be prone to overfitting, with an
+accuracy of 0.638, and a balanced precision, recall, and F1
+score of approximately 0.64 and 0.63, respectively. K-Nearest
+Neighbors (KNN) exhibit decreased accuracy and performance due to their reliance on proximity-based classification,
+with an accuracy of 0.463, a precision of 0.42, recall of 0.46,
+and an F1 score of 0.43. Gaussian naive Bayes, despite its
+computational efficiency, demonstrates limited precision and
+efficacy in this context, with an accuracy of 0.065 and very
+low recall and F1 score metrics. By elucidating the strengths
+and limitations of each model, this research equips the reader
+with the knowledge necessary to make informed decisions
+regarding model selection, thus improving the efficacy and
+efficiency of undervalued stock identification processes in
+financial markets, as shown in Table 7 and Figure 4.
+
+
+D. COMPARISON BETWEEN APPROACHED ALGORITHM
+TRADING AND THE TRADITIONAL TRADING INDICATOR
+In this section, we present a comprehensive evaluation of the
+performance of our proposed algorithmic trading approach
+in comparison to six widely recognized traditional trading
+indicators: Moving Average (MA), Relative Strength Index
+(RSI), Moving Average Convergence Divergence (MACD),
+Bollinger Bands, On-Balance Volume (OBV) and Ichimoku.
+The analysis uses data from Apple’s stock, drawn from the
+largest S&P 500 index, covering the period from January 2,
+2014, to October 14, 2024. To facilitate a clear comparison, we based our evaluation on the total returns generated from an initial investment of $10,000. This approach
+allows us to quantify the effectiveness of each trading
+strategy in terms of profitability over the specified time
+frame. The results, summarized in Table 8 and illustrated
+
+TABLE 7. Machine learning test performance details
+
+later anupuren
+
+FIGURE 4. Analyze the radar graph of machine learning test performance.
+
+later anupuren
+
+
+in Figures 5-11, reveal significant disparities in performance
+among the various methods. The findings indicate that the
+algorithmic trading approach achieved a remarkable total
+return of 901%, substantially exceeding the returns generated by all traditional indicators. For example, MACD,
+which emerged as the top-performing traditional indicator with the highest performance, yielded a total return
+of 598%. Other indicators, such as the RSI and Ichimoku,
+produced returns of 329% and 529%, respectively. These
+results highlight the algorithm’s superior ability to capitalize on market opportunities and navigate the complexities
+of stock price movements. Consistent performance of the
+
+TABLE 8. Comparison of the total return between the approach to
+algorithm trading and the traditional trading indicator
+
+later anupuren
+
+
+FIGURE 5. MA20_MA50.
+
+later anupuren
+
+
+algorithmic approach underscores its potential to leverage
+advanced computational techniques and complex pattern
+recognition, which are often beyond the capabilities of traditional indicators. Although traditional trading strategies rely
+primarily on historical price and volume data, our algorithm
+incorporates a wider range of data inputs and employs sophisticated machine learning techniques to identify and exploit
+market trends. This capability allows for a more dynamic and
+responsive trading strategy, which is particularly valuable in
+the context of rapidly changing financial markets.
+Furthermore, comparative analysis emphasizes the growing importance of algorithmic trading methodologies in the
+financial sector. As markets become increasingly complex
+
+FIGURE 6. Relative Strength Index (RSI)
+
+later anupuren
+
+and volatile, traders are seeking more effective tools to
+enhance their investment strategies. The results of this study
+suggest that the adoption of advanced algorithms can significantly improve overall profitability and provide a competitive
+edge in trading.
+The result of this analysis not only demonstrates the
+effectiveness of our algorithmic trading approach, but also
+reinforces the need for traders to embrace innovative methodologies that can adapt to the evolving landscape of financial
+markets. By integrating advanced algorithms into their trading strategies, investors can optimize their decision-making
+processes and achieve superior investment outcomes.
+
+E. KEY FINDINGS
+The results of this comparative analysis clearly indicate that
+the algorithmic trading approach offers significant advantages over traditional trading indicators when applied to
+Tesla’s stock over the specified period. The data reveal several
+key findings that highlight the superiority in various aspects.
+First, the algorithmic trading strategy achieved a remarkable total return of 901%, substantially outpacing all
+traditional indicators. In comparison, the Moving Average Convergence Divergence (MACD), which was the
+top-performing traditional indicator, yielded a total return of
+598%, showcasing the algorithm’s effectiveness in capitalizing on market opportunities. Furthermore, the algorithm
+maintained a consistently higher level of profitability
+throughout the testing period. Although other indicators, such
+
+FIGURE 7. Moving Average Convergence Divergence (MACD).
+
+later anupuren
+
+as the relative strength index (RSI) and Ichimoku, also performed well with returns of 329% and 529%, respectively,
+they ultimately fell short of the algorithm’s sustained performance. In addition to profitability, the algorithmic approach
+integrated robust risk management strategies, mitigating
+potential losses, and, thereby, enhancing its effectiveness.
+This comprehensive focus on risk is particularly valuable
+in volatile market conditions, which often pose significant
+challenges to traditional trading strategies.
+Second, the algorithm demonstrated a remarkable ability to
+adapt to changing market conditions during the study period.
+This adaptability is critical for long-term investment success,
+especially in a dynamic environment such as the stock market,
+where conditions can change rapidly. Lastly, the algorithm
+uses large data sets and intricate patterns, enabling a more
+nuanced understanding of market movements. On the contrary, traditional indicators rely primarily on historical price
+and volume data, which can limit their effectiveness in rapidly
+changing market environments.
+The results in this chapter indicate that these findings
+underscore the potential for algorithmic trading approaches
+to revolutionize investment strategies, providing traders with
+advanced tools that improve decision-making and optimize
+performance. As the financial landscape continues to evolve,
+adopting these innovative trading algorithms may become
+essential to achieve superior investment outcomes. This
+research not only contributes valuable information on the
+
+FIGURE 8. Bollinger bands.
+
+later anupuren
+
+effectiveness of algorithmic trading compared to traditional
+methods but also encourages further exploration and application of these strategies in real-world trading scenarios.
+
+
+
+VI. DISCUSSION
+The integration of machine learning techniques with
+multi-indicator strategies in algorithmic trading represents
+a significant advancement in the field, as evidenced by
+the findings of this research. Empirical results demonstrate
+that the proposed framework not only enhances predictive accuracy but also optimizes trading performance under
+various market conditions. This dual benefit underscores
+the potential of hybrid models that leverage the strengths
+of traditional technical analysis and modern computational
+methods. One of the key insights from this study is the
+dynamic selection of indicators, which allows for a more
+nuanced understanding of market trends. Traditional trading
+strategies often rely on fixed sets of indicators, which can
+limit their effectiveness in rapidly changing environments.
+On the contrary, our approach adapts to market conditions,
+enabling traders to respond more effectively to fluctuations
+and anomalies. This adaptability is crucial in the volatile
+financial landscape, where the ability to pivot quickly can significantly affect investment outcomes. Moreover, the positive
+impact of the multi-indicator approach on interpretability and
+decision-making processes cannot be overstated. The nature
+of many machine learning models has been a barrier to their
+
+FIGURE 9. On-Balance Volume (OBV)
+
+later anupuren
+
+widespread adoption among practitioners [89], [90]. By providing clearer insights into the predictions of the model,
+our framework fosters greater trust and confidence among
+traders, which is essential for the successful implementation
+of algorithmic trading strategies. This aspect of our research
+highlights the importance of not only developing sophisticated models, but also ensuring that they are accessible and
+understandable to users.
+In contrast, the application of long- and short-term memory
+(LSTM) networks in algorithmic trading has shown mixed
+results in previous studies [10], [61], [91]. For example,
+while LSTMs are designed to capture temporal dependencies
+in sequential data, this research demonstrated that LSTMs
+often struggle with overfitting, particularly when trained on
+limited datasets [92], [93], [94]. Their findings indicated
+that while LSTMs could achieve high accuracy in predicting stock price movements, the models frequently failed to
+translate this accuracy into profitable trading strategies due
+to their complexity and the need for extensive hyperparameter tuning. Furthermore, LSTMs can be computationally
+intensive, making them less suitable for real-time trading
+applications [95], [96], [97], [98]. In contrast, our proposed
+multi-indicator framework emphasizes computational efficiency and flexibility, allowing for quicker adaptations to
+market changes without the extensive resource requirements
+associated with LSTM models [99]. This is particularly relevant in high-frequency trading environments, where speed
+
+FIGURE 10. On-Balance Volume (OBV)
+
+later anupuren
+
+and adaptability are paramount. Another limitation of LSTMs
+highlighted in the literature is their interpretability. Although
+they can model complex relationships in data, the lack of
+transparency in how LSTMs arrive at their predictions can
+hinder their practical application in trading [100], [101].
+In our research, the multi-indicator approach not only
+improves predictive accuracy but also enhances interpretability, providing traders with insights into the rationale behind
+model predictions. This transparency is crucial to fostering trust and facilitating informed decision-making among
+traders. In addition, this paper integrates machine learning
+with traditional valuation metrics like PE and PB ratios to
+identify undervalued stocks, contrasting with [102] focus on
+the UMO factor, which captures mispricing through corporate
+financing actions. While the current research emphasizes
+quantitative analysis, the UMO studies highlight behavioral
+finance’s role in market dynamics and [103] provides a deeper
+exploration of behavioral factors influencing market mispricing. Both approaches aim to enhance predictive power
+and investment strategies, suggesting that a hybrid model
+combining machine learning techniques with insights from
+behavioral finance could lead to superior stock selection
+and performance outcomes, addressing the complexities of
+market behavior and misevaluation.
+Overall, this research contributes valuable insights to
+the field of algorithmic trading by proposing a flexible
+and computationally efficient model that optimizes trading
+
+FIGURE 11. Approached algorithm trading
+
+later anupuren
+
+performance while enhancing the understanding of market
+dynamics. As the financial landscape continues to evolve,
+the adoption of innovative trading algorithms that leverage machine learning and multi-indicator strategies will
+be essential for achieving superior investment outcomes.
+We encourage further exploration and validation of these
+methodologies to drive advances in algorithmic trading practices, ultimately benefiting both individual and institutional
+investors.
+
+
+VII. CONCLUSION
+This research paper presents a comprehensive exploration
+of integrating machine learning with multi-indicator strategies in algorithmic trading. The findings indicate that while
+traditional trading methods have made significant strides,
+they often struggle to maintain predictive accuracy and
+adaptability in rapidly changing market dynamics. Using
+advanced machine learning algorithms, the proposed framework shows marked improvements in predicting stock movements and optimizing trading strategies under various market
+conditions.
+In addressing the research questions, we found that integrating machine learning with multi-indicator strategies
+significantly enhances the predictive accuracy and overall
+performance of algorithmic trading models. This improvement is attributed to the dynamic selection of indicators,
+which allows a nuanced understanding of market trends and mitigates the limitations associated with fixed indicator sets.
+Furthermore, the multi-indicator approach positively impacts
+the interpretability and decision-making processes of traders.
+By providing deeper insights into model predictions, this
+approach helps demystify the ‘‘black box’’ nature of machine
+learning, fostering greater trust and confidence among
+practitioners.
+Despite these promising results, the study acknowledges
+certain limitations, such as reliance on specific datasets
+and the need for broader validation across different asset
+classes. Future research should focus on refining these models, enhancing their scalability, and exploring the integration
+of explainable AI techniques to improve transparency in
+decision-making processes.
+In conclusion, this research contributes valuable information to the field of algorithmic trading by proposing a
+flexible and computationally efficient model that optimizes
+trading performance and enhances understanding of market
+dynamics. As the financial landscape continues to evolve,
+adopting innovative trading algorithms that leverage machine
+learning and multi-indicator strategies will be essential for
+achieving superior investment outcomes. We encourage further exploration and validation of these methodologies to
+drive advances in algorithmic trading practices.
+
+LIMITATIONS AND FURTHER RESEARCH
+This research advances the integration of machine learning
+with multi-indicator strategies in algorithmic trading, yet
+several limitations exist. Reliance on specific data sets may
+restrict the generalizability of the findings in different markets. Additionally, the computational complexity of advanced
+algorithms can hinder the application in real time. Overfitting
+remains a concern, as models may not generalize well to
+unseen data. To address these issues, future research should
+explore diverse datasets, optimize models for real-time use,
+and incorporate explainable AI techniques to enhance interpretability. Longitudinal studies and the inclusion of external
+factors could further improve predictive capabilities and
+model robustness.
+
+CONFLICT OF INTEREST
+The authors declare that the research was conducted in the
+absence of any commercial or financial relationship that
+could be construed as a potential conflict of interest.
+ 
+DATA AVAILABILITY STATEMENT
+Original contributions presented in the study are included in
+the article/supplementary material; further inquiries can be
+directed to the corresponding author.
+
+
+REFERENCES
+[1] R. A. A. Aguirre and A. A. A. Aguirre, ‘‘Behavioral finance: Evolution
+from the classical theory and remarks,’’ J. Econ. Surv., vol. 38, no. 2,
+pp. 452–475, Apr. 2024.
+[2] Q. Xiao and B. Ihnaini, ‘‘Stock trend prediction using sentiment analysis,’’ PeerJ Comput. Sci., vol. 9, p. e1293, Mar. 2023.
+[3] M. Rodríguez-Ibánez, A. Casánez-Ventura, F. Castejón-Mateos,
+and P.-M. Cuenca-Jiménez, ‘‘A review on sentiment analysis from
+social media platforms,’’ Expert Syst. Appl., vol. 223, Aug. 2023,
+Art. no. 119862.
+[4] A. Guezzaz, Y. Asimi, M. Azrour, and A. Asimi, ‘‘Mathematical validation of proposed machine learning classifier for heterogeneous traffic
+and anomaly detection,’’ Big Data Mining Anal., vol. 4, no. 1, pp. 18–24,
+Mar. 2021.
+[5] Z. Wang, X. Xiao, and S. Rajasekaran, ‘‘Novel and efficient randomized
+algorithms for feature selection,’’ Big Data Mining Anal., vol. 3, no. 3,
+pp. 208–224, Sep. 2020.
+[6] M. Bouazizi and T. Ohtsuki, ‘‘Multi-class sentiment analysis on Twitter:
+Classification performance and challenges,’’ Big Data Mining Anal.,
+vol. 2, no. 3, pp. 181–194, Sep. 2019.
+[7] Y. Shi, Y. Zheng, K. Guo, and X. Ren, ‘‘Relationship between herd
+behavior and Chinese stock market fluctuations during a bullish period
+based on complex networks,’’ Int. J. Inf. Technol. Decis. Making, vol. 21,
+no. 1, pp. 405–421, Jan. 2022.
+[8] D. Lv, Y. Gong, J. Chen, and Y. Xiang, ‘‘Recommendation algorithm of
+industry stock trading model with TODIM,’’ Int. J. Inf. Technol. Decis.
+Making, vol. 23, no. 3, pp. 1301–1334, May 2024.
+[9] X. Yuan, J. Yuan, T. Jiang, and Q. U. Ain, ‘‘Integrated longterm stock selection models based on feature selection and machine
+learning algorithms for China stock market,’’ IEEE Access, vol. 8,
+pp. 22672–22685, 2020.
+[10] M.-C. Lee, J.-W. Chang, S.-C. Yeh, T.-L. Chia, J.-S. Liao, and
+X.-M. Chen, ‘‘Applying attention-based BiLSTM and technical indicators in the design and performance analysis of stock trading strategies,’’
+Neural Comput. Appl., vol. 34, no. 16, pp. 13267–13279, Aug. 2022.
+[11] Z. Pourahmadi, D. Fareed, and H. R. Mirzaei, ‘‘A novel stock trading
+model based on reinforcement learning and technical analysis,’’ Ann.
+Data Sci., vol. 11, no. 5, pp. 1653–1674, Oct. 2024.
+[12] G.-M. Chatziloizos, D. Gunopulos, and K. Konstantinou, ‘‘Deep learning
+for stock market prediction using sentiment and technical analysis,’’
+Social Netw. Comput. Sci., vol. 5, no. 5, p. 446, Apr. 2024.
+[13] S. A. Mohammed, ‘‘Day trading strategy based on transformer model,
+technical indicators and multiresolution analysis,’’ Int. J. Adv. Comput.
+Sci. Appl., vol. 15, no. 4, pp. 1–13, 2024.
+[14] J. Kaur and K. Dharni, ‘‘Data mining–based stock price prediction using
+hybridization of technical and fundamental analysis,’’ Data Technol.
+Appl., vol. 57, no. 5, pp. 780–800, Nov. 2023.
+[15] S. Agrawal, N. Kumar, G. Rathee, C. A. Kerrache, C. T. Calafate, and
+M. Bilal, ‘‘Improving stock market prediction accuracy using sentiment
+and technical analysis,’’ Electron. Commerce Res., vol. 2024, pp. 1–24,
+Jun. 2024.
+[16] K. A. Suhail, S. Sankar, A. S. Kumar, T. Nestor, N. F. Soliman,
+A. D. Algarni, W. El-Shafai, A. El-Samie, and E. Fathi, ‘‘Stockmarket
+trading based onmarket sentiments and reinforcement learning,’’ Comput., Mater. Continua, vol. 70, no. 1, pp. 1–16, 2022.
+[17] A. Gupta, K. Joshi, M. Patel, and V. Pratap, ‘‘Visualization and forecasting of stock’s closing price using machine learning,’’ Multimedia Tools
+Appl., vol. 83, pp. 72471–72489, Feb. 2024.
+[18] H. Yang, Y. Zhu, and Q. Huang, ‘‘A multi-indicator feature selection
+for CNN-driven stock index prediction,’’ in Proc. Int. Conf. Neural Inf.
+Process., 2018, pp. 35–46.
+[19] T. Salkar, A. Shinde, N. Tamhankar, and N. Bhagat, ‘‘Algorithmic trading
+using technical indicators,’’ in Proc. Int. Conf. Commun. Inf. Comput.
+Technol. (ICCICT), 2021, pp. 1–6.
+[20] N. Sukma and S. N. Chakkrit, ‘‘Trading strategies development
+using combined enhanced voter-method with technical indicators and
+machine learning,’’ ICIC Exp. Lett., B, Appl., vol. 15, no. 5, p. 427,
+2024.
+[21] L. Chen, Y. Chen, C. Tan, Y. Luo, H. Dou, and Y. Yang, ‘‘Cross-chain
+asset trading scheme for notaries based on edge cloud storage,’’ J. Cloud
+Comput., vol. 13, no. 1, p. 90, Apr. 2024.
+[22] N. Sukma and C. S. Namahoot, ‘‘Enhancing trading strategies: A multiindicator analysis for profitable algorithmic trading,’’ Comput. Econ.,
+vol. 2024, pp. 1–34, Aug. 2024.
+[23] G. Iovane, A. Amorosia, M. Leone, M. Nappi, and G. Tortora,
+‘‘Multi indicator approach via mathematical inference for price dynamics in information fusion context,’’ Inf. Sci., vol. 373, pp. 183–199,
+Dec. 2016.
+[24] Z. Yang, K. Hao, X. Cai, L. Chen, and L. Ren, ‘‘Prediction of stock trading
+signal based on multi-indicator channel convolutional neural networks,’’
+in Proc. IEEE 8th Data Driven Control Learn. Syst. Conf. (DDCLS),
+May 2019, pp. 912–917.
+[25] S. Mukherjee, B. Sadhukhan, N. Sarkar, D. Roy, and S. De, ‘‘Stock market
+prediction using deep learning algorithms,’’ CAAI Trans. Intell. Technol.,
+vol. 8, no. 1, pp. 82–94, 2023.
+[26] D. Karzanov, ‘‘Headline-driven classification and local interpretation for
+market outperformance and low-risk stock prediction,’’ Comput. Econ.,
+vol. 64, no. 2, pp. 769–788, Aug. 2024.
+[27] J. Behera, A. K. Pasayat, H. Behera, and P. Kumar, ‘‘Prediction based
+mean-value-at-risk portfolio optimization using machine learning regression algorithms for multi-national stock markets,’’ Eng. Appl. Artif. Intell.,
+vol. 120, Apr. 2023, Art. no. 105843.
+[28] S. P. John and R. D. Villiers, ‘‘Factors affecting the success of marketing
+in higher education: A relationship marketing perspective,’’ J. Marketing
+Higher Educ., vol. 34, no. 2, pp. 875–894, Jul. 2024.
+[29] S. M.-F. Yen and Y.-L. Hsu, ‘‘Profitability of technical analysis in financial and commodity futures markets—A reality check,’’ Decis. Support
+Syst., vol. 50, no. 1, pp. 128–139, Dec. 2010.
+[30] S. T. Kadkhoda and B. Amiri, ‘‘A hybrid network analysis and machine
+learning model for enhanced financial distress prediction,’’ IEEE Access,
+vol. 12, pp. 52759–52777, 2024.
+[31] X. Zhang, X. Ai, X. Wang, G. Zong, and J. Zhang, ‘‘A study on the
+effects of digital finance on green low-carbon circular development based
+on machine learning models,’’ Mathematics, vol. 11, no. 18, p. 3903,
+Sep. 2023.
+[32] X. Lei, U. H. Mohamad, A. Sarlan, M. Shutaywi, Y. I. Daradkeh, and
+H. O. Mohammed, ‘‘Development of an intelligent information system for
+financial analysis depend on supervised machine learning algorithms,’’
+Inf. Process. Manage., vol. 59, no. 5, Sep. 2022, Art. no. 103036.
+[33] T. T. T. Pham and H.-G. Doan, ‘‘An optimal knowledge distillation for
+formulating an effective defense model against membership inference
+attacks,’’ Int. J. Adv. Comput. Sci. Appl., vol. 15, no. 5, pp. 1–11, 2024.
+[34] Q. Xue, Y. Ling, and B. Tian, ‘‘Portfolio optimization model for gold
+and bitcoin based on weighted unidirectional dual-layer LSTM model
+and SMA-slope strategy,’’ Comput. Intell. Neurosci., vol. 2022, Jun. 2022,
+Art. no. 1869897.
+[35] D. K. Padhi, N. Padhy, A. K. Bhoi, J. Shafi, and S. H. Yesuf, ‘‘An
+intelligent fusion model with portfolio selection and machine learning for
+stock market prediction,’’ Comput. Intell. Neurosci., vol. 2022, Jun. 2022,
+Art. no. 7588303.
+[36] P. Rebentrost and S. Lloyd, ‘‘Quantum computational finance: Quantum algorithm for portfolio optimization,’’ KI-Künstliche Intelligenz,
+vol. 2024, pp. 1–12, Aug. 2024.
+[37] R. Orús, S. Mugel, and E. Lizaso, ‘‘Quantum computing for finance:
+Overview and prospects,’’ Rev. Phys., vol. 4, Nov. 2019, Art. no. 100028.
+[38] T. Martins, A. M. de Almeida, E. Cardoso, and L. Nunes, ‘‘Explainable
+artificial intelligence (XAI): A systematic literature review on taxonomies
+and applications in finance,’’ IEEE Access, vol. 12, pp. 618–629, 2024.
+[39] M. E. Mahjouby, M. T. Bennani, M. Lamrini, B. Bossoufi,
+T. A. H. Alghamdi, and M. E. Far, ‘‘Machine learning algorithms
+for forecasting and categorizing euro-to-dollar exchange rates,’’ IEEE
+Access, vol. 12, pp. 74211–74217, 2024.
+[40] P. Cao and X. He, ‘‘Machine learning solutions for fast real estate derivatives pricing,’’ Comput. Econ., vol. 64, no. 4, pp. 2003–2032, Oct. 2024.
+[41] B. Zhan, S. Zhang, H. S. Du, and X. Yang, ‘‘Exploring statistical arbitrage
+opportunities using machine learning strategy,’’ Comput. Econ., vol. 60,
+no. 3, pp. 861–882, Oct. 2022.
+[42] B. Diallo, A. Bagudu, and Q. Zhang, ‘‘Fama-french three versus five,
+which model is better? A machine learning approach,’’ J. Forecasting,
+vol. 42, no. 6, pp. 1461–1475, Sep. 2023.
+[43] S. García-Méndez, F. D. Arriba-Pérez, A. Barros-Vila, and
+F. J. González-Castaño, ‘‘Detection of temporality at discourse level on
+financial news by combining natural language processing and machine
+learning,’’ Expert Syst. Appl., vol. 197, Jul. 2022, Art. no. 116648.
+[44] W. Wei and Q. Zhang, ‘‘Evaluation of rural financial ecological environment based on machine learning and improved neural network,’’ Neural
+Comput. Appl., vol. 34, no. 12, pp. 9335–9352, Jun. 2022.
+[45] P. Chen, Z. Boukouvalas, and R. Corizzo, ‘‘A deep fusion model for
+stock market prediction with news headlines and time series data,’’ Neural
+Comput. Appl., vol. 36, pp. 21229–21271, Aug. 2024.
+[46] A. Sadeghi, A. Daneshvar, and M. Madanchi Zaj, ‘‘Combined ensemble
+multi-class SVM and fuzzy NSGA-II for trend forecasting and trading in
+forex markets,’’ Expert Syst. Appl., vol. 185, Dec. 2021, Art. no. 115566.
+[47] S. Bhanja and A. Das, ‘‘A black swan event-based hybrid model for Indian
+stock markets’ trends prediction,’’ Innov. Syst. Softw. Eng., vol. 20, no. 2,
+pp. 121–135, Jun. 2024.
+[48] E. Barucci, M. Bonollo, F. Poli, and E. Rroji, ‘‘A machine learning
+algorithm for stock picking built on information based outliers,’’ Expert
+Syst. Appl., vol. 184, Dec. 2021, Art. no. 115497.
+[49] J. Ayala, M. García-Torres, J. L. V. Noguera, F. Gómez-Vela, and
+F. Divina, ‘‘Technical analysis strategy optimization using a machine
+learning approach in stock market indices,’’ Knowl.-Based Syst., vol. 225,
+Aug. 2021, Art. no. 107119.
+[50] T.-I. Theodorou, A. Zamichos, M. Skoumperdis, A. Kougioumtzidou,
+K. Tsolaki, D. Papadopoulos, T. Patsios, G. Papanikolaou,
+A. Konstantinidis, A. Drosou, and D. Tzovaras, ‘‘An AI-enabled
+stock prediction platform combining news and social sensing with
+financial statements,’’ Future Internet, vol. 13, no. 6, p. 138, May 2021.
+[51] G. Sharma, S. Vidalis, P. Mankar, N. Anand, Minakshi, and S. Kumar,
+‘‘Automated passive income from stock market using machine learning
+and big data analytics with security aspects,’’ Multimedia Tools Appl.,
+vol. 2024, pp. 1–28, May 2024.
+[52] V. Gupta and E. Kumar, ‘‘AO-SAKEL: Arithmetic optimization-based
+self-adaptive kernel extreme learning for international trade prediction,’’
+Evolving Syst., vol. 15, no. 3, pp. 829–848, Jun. 2024.
+[53] M. Fisichella and F. Garolla, ‘‘Can deep learning improve technical
+analysis of forex data to predict future price movements?’’ IEEE Access,
+vol. 9, pp. 153083–153101, 2021.
+[54] S.-Y. Kuo and Y.-H. Chou, ‘‘Building intelligent moving average-based
+stock trading system using Metaheuristic algorithms,’’ IEEE Access,
+vol. 9, pp. 140383–140396, 2021.
+[55] A. Maratkhan, I. Ilyassov, M. Aitzhanov, M. F. Demirci, and
+A. M. Ozbayoglu, ‘‘Deep learning-based investment strategy: Technical
+indicator clustering and residual blocks,’’ Soft Comput., vol. 25, no. 7,
+pp. 5151–5161, Apr. 2021.
+[56] K. Guo and H. Xie, ‘‘Deep learning in finance assessing Twitter sentiment
+impact and prediction on stocks,’’ PeerJ Comput. Sci., vol. 10, p. e2018,
+May 2024.
+[57] T. Kabbani and E. Duman, ‘‘Deep reinforcement learning approach
+for trading automation in the stock market,’’ IEEE Access, vol. 10,
+pp. 93564–93574, 2022.
+[58] M. Zubair, J. Ali, M. Alhussein, S. Hassan, K. Aurangzeb, and M. Umair,
+‘‘An improved machine learning-driven framework for cryptocurrencies
+price prediction with sentimental cautioning,’’ IEEE Access, vol. 12,
+pp. 51395–51418, 2024.
+[59] M. Beniwal, A. Singh, and N. Kumar, ‘‘Forecasting multistep daily stock
+prices for long-term investment decisions: A study of deep learning
+models on global indices,’’ Eng. Appl. Artif. Intell., vol. 129, Mar. 2024,
+Art. no. 107617.
+[60] E. Hossain, M. S. Hossain, P.-O. Zander, and K. Andersson, ‘‘Machine
+learning with belief rule-based expert systems to predict stock price
+movements,’’ Expert Syst. Appl., vol. 206, Nov. 2022, Art. no. 117706.
+[61] I. Botunac, J. Bosna, and M. Matetić, ‘‘Optimization of traditional stock
+market strategies using the LSTM hybrid approach,’’ Information, vol. 15,
+no. 3, p. 136, Feb. 2024.
+[62] T. S. T. Buansing, A. Golan, and A. Ullah, ‘‘An information-theoretic
+approach for forecasting interval-valued SP500 daily returns,’’ Int. J.
+Forecasting, vol. 36, no. 3, pp. 800–813, Jul. 2020.
+[63] J. Lee and C.-F. Lee, ‘‘Data collection, presentation, and Yahoo! finance,’’
+in Essentials of Excel VBA, Python, and R (Financial Statistics and
+Portfolio Analysis). Cham, Switzerland: Springer, 2023, pp. 19–80.
+[64] Y. Bao and S. Yang, ‘‘Two novel SMOTE methods for solving imbalanced
+classification problems,’’ IEEE Access, vol. 11, pp. 5816–5823, 2023.
+[65] Y. Li, Y. Wang, T. Li, B. Li, and X. Lan, ‘‘SP-SMOTE: A novel space
+partitioning based synthetic minority oversampling technique,’’ Knowl.-
+Based Syst., vol. 228, Sep. 2021, Art. no. 107269.
+[66] M. H. Kotb and R. Ming, ‘‘Comparing SMOTE family techniques in predicting insurance premium defaulting using machine learning models,’’
+Int. J. Adv. Comput. Sci. Appl., vol. 12, no. 9, pp. 621–629, 2021.
+[67] R. Bhargavi, S. Gumparthi, and R. Anith, ‘‘Relative strength index for
+developing effective trading strategies in constructing optimal portfolio,’’
+Int. J. Appl. Eng. Res., vol. 12, no. 19, pp. 8926–8936, 2017.
+[68] Y. Ni, Y.-C. Liao, and P. Huang, ‘‘Momentum in the Chinese stock market:
+Evidence from stochastic oscillator indicators,’’ Emerg. Markets Finance
+Trade, vol. 51, no. 1, pp. S99–S110, Jan. 2015.
+[69] M. Maitah, P. Procházka, M. Čermák, and K. Šrédl, ‘‘Commodity channel
+index: Evaluation of trading rule of agricultural commodities,’’ Int. J.
+Econ. Financial Issues, vol. 6, no. 1, pp. 176–178, Jan. 2016.
+[70] T. Gokcek, I. Sengor, and O. Erdinc, ‘‘A novel multi-hierarchical bidding
+strategy for peer-to-peer energy trading among communities,’’ IEEE
+Access, vol. 10, pp. 23798–23807, 2022.
+[71] P. K. Narayan, H. A. Ahmed, and S. Narayan, ‘‘Do momentum-based
+trading strategies work in the commodity futures markets?’’ J. Futures
+Markets, vol. 35, no. 9, pp. 868–891, Sep. 2015.
+[72] Y. Li and Y. Chen, ‘‘Enhancing a stock timing strategy by reinforcement
+learning,’’ IAENG Int. J. Comput. Sci., vol. 48, no. 4, pp. 1–10, 2021.
+[73] N. H. Hung, ‘‘Various moving average convergence divergence trading
+strategies: A comparison,’’ Investment Manage. Financial Innov., vol. 13,
+no. 2, pp. 363–369, Jul. 2016.
+[74] F. A. Rudiawarni, D. Sulistiawan, and Y. K. Feliana, ‘‘Examining trading
+strategies using trend following indicators for Indonesian stock market,’’
+Int. J. Trade Global Markets, vol. 13, no. 1, pp. 52–60, 2020.
+[75] Y. Li, P. Ni, and V. Chang, ‘‘Application of deep reinforcement learning
+in stock trading strategies and stock forecasting,’’ Computing, vol. 102,
+no. 6, pp. 1305–1322, Jun. 2020.
+[76] T. Chavarnakul and D. Enke, ‘‘Stock trading using neural networks and
+the ease of movement technical indicator,’’ in Proc. IIE Annu. Conf., 2006,
+pp. 1–6.
+[77] J.-Z. Huang, W. Huang, and J. Ni, ‘‘Predicting bitcoin returns using highdimensional technical indicators,’’ J. Finance Data Sci., vol. 5, no. 3,
+pp. 140–155, Sep. 2019.
+[78] S. Deng, H. Yu, C. Wei, T. Yang, and S. Tatsuro, ‘‘The profitability of
+ichimoku kinkohyo based trading rules in stock markets and FX markets,’’
+Int. J. Finance Econ., vol. 26, no. 4, pp. 5321–5336, Oct. 2021.
+[79] G. Cohen, ‘‘Algorithmic strategies for precious metals price forecasting,’’
+Mathematics, vol. 10, no. 7, p. 1134, Apr. 2022.
+[80] C. Gil, ‘‘Intraday trading of precious metals futures using algorithmic
+systems,’’ Chaos, Solitons Fractals, vol. 154, Jan. 2022, Art. no. 111676.
+[81] S. M. Nor and N. H. M. Zawawi, ‘‘Technical trading profitability:
+Evidence from international oil and gas companies,’’ AIP Conf. Proc.,
+vol. 2644, no. 1, 2022, Art. no. 030036.
+[82] D. Mitchell, J. Białkowski, and S. Tompaidis, ‘‘Volume-weighted average
+price tracking: A theoretical and empirical study,’’ IISE Trans., vol. 52,
+no. 8, pp. 864–889, Aug. 2020.
+[83] A. Gorgulho, R. Neves, and N. Horta, ‘‘Applying a GA kernel on optimizing technical analysis rules for stock picking and portfolio composition,’’
+Expert Syst. Appl., vol. 2011, pp. 14072–14085, May 2011.
+[84] R. Sugumar, A. Rengarajan, and C. Jayakumar, ‘‘A technique to stock
+market prediction using fuzzy clustering and artificial neural networks,’’
+Comput. Inf., vol. 33, no. 5, pp. 992–1024, Oct. 2015.
+[85] D. Vezeris, T. Kyrgos, I. Karkanis, and V. Bizergianidou, ‘‘Automated
+trading systems’ evaluation using d-backtest PS method and WM ranking
+in financial markets,’’ Investment Manage. Financial Innov., vol. 17, no. 2,
+pp. 198–215, Jun. 2020.
+[86] C. Brownlees and A. B. M. Souza, ‘‘Backtesting global growth-at-risk,’’
+J. Monetary Econ., vol. 118, pp. 312–330, Mar. 2021.
+[87] S. T. Tayalı, ‘‘A novel backtesting methodology for clustering in
+mean–variance portfolio optimization,’’ Knowl.-Based Syst., vol. 209,
+Dec. 2020, Art. no. 106454.
+[88] M. Grinblatt and S. Titman, Financial Markets and Corporate Strategy.
+New York, NY, USA: McGraw-Hill, 2002.
+[89] Y. Jiang, ‘‘Application and comparison of multiple machine learning
+models in finance,’’ Sci. Program., vol. 2022, pp. 1–9, Mar. 2022.
+[90] J. E. Camacho-Cogollo, I. Bonet, B. Gil, and E. Iadanza, ‘‘Machine learning models for early prediction of sepsis on large healthcare datasets,’’
+Electronics, vol. 11, no. 9, p. 1507, May 2022.
+[91] N. Yadav Vanguri, S. Pazhanirajan, and T. Anil Kumar, ‘‘Extraction of
+technical indicators and data augmentation-based stock market prediction
+using deep LSTM integrated competitive swarm feedback algorithm,’’
+Int. J. Inf. Technol. Decis. Making, vol. 2023, pp. 1–27, Feb. 2023.
+[92] K. Gajamannage, Y. Park, and D. I. Jayathilake, ‘‘Real-time forecasting of
+time series in financial markets using sequentially trained dual-LSTMs,’’
+Expert Syst. Appl., vol. 223, Aug. 2023, Art. no. 119879.
+[93] C. Liang, Q. Luo, Y. Li, and L. D. T. Huynh, ‘‘Global financial stress index
+and long-term volatility forecast for international stock markets,’’ J. Int.
+Financial Markets, Inst. Money, vol. 88, Oct. 2023, Art. no. 101825.
+[94] T. Fischer and C. Krauss, ‘‘Deep learning with long short-term memory
+networks for financial market predictions,’’ Eur. J. Oper. Res., vol. 270,
+no. 2, pp. 654–669, Oct. 2018.
+[95] K. J. Huang, ‘‘DeepValue: A comparable framework for valuebased strategy by machine learning,’’ Comput. Econ., vol. 60, no. 1,
+pp. 325–346, Jun. 2022.
+[96] S. Banik, N. Sharma, M. Mangla, S. N. Mohanty, and S. Shitharth,
+‘‘LSTM based decision support system for swing trading in stock market,’’ Knowl.-Based Syst., vol. 239, Mar. 2022, Art. no. 107994.
+[97] D. C. Yıldırım, I. H. Toroslu, and U. Fiore, ‘‘Forecasting directional movement of forex data using LSTM with technical and
+macroeconomic indicators,’’ Financial Innov., vol. 7, no. 1, pp. 1–36,
+Dec. 2021.
+[98] C. Sang and M. Di Pierro, ‘‘Improving trading technical analysis with
+tensorflow long short-term memory (LSTM) neural network,’’ J. Finance
+Data Sci., vol. 5, no. 1, pp. 1–11, Mar. 2019.
+[99] M. A. Alghamdi, A. S. A.-M. Al-Ghamdi, and M. Ragab, ‘‘Predicting
+energy consumption using stacked LSTM snapshot ensemble,’’ Big Data
+Mining Anal., vol. 7, no. 2, pp. 247–270, Jun. 2024.
+[100] N. Chen, H. Tu, X. Duan, L. Hu, and C. Guo, ‘‘Semisupervised
+anomaly detection of multivariate time series based on a variational
+autoencoder,’’ Int. J. Speech Technol., vol. 53, no. 5, pp. 6074–6098,
+Jul. 2022.
+[101] S. Li, Z. Tian, and Y. Li, ‘‘Residual long short-term memory network with multi-source and multi-frequency information fusion: An
+application to China’s stock market,’’ Inf. Sci., vol. 622, pp. 133–147,
+Apr. 2023.
+[102] D. Hirshleifer and D. Jiang, ‘‘A financing-based misvaluation factor and
+the cross-section of expected returns,’’ Rev. Financial Stud., vol. 23, no. 9,
+pp. 3401–3436, Sep. 2010.
+[103] F. Ali, ‘‘Testing mispricing-augmented factor models in an emerging
+market: A quest for parsimony,’’ Borsa Istanbul Rev., vol. 22, no. 2,
+pp. 272–284, Mar. 2022.

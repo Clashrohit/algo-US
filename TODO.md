@@ -1,0 +1,10 @@
+- [x] Add retry logic for yf.download in get_data function with exponential backoff
+- [x] Increase max_retries to 5 for both download and info
+- [x] Test the script to ensure it works
+- [x] Map the project base paper and code - Created paper_code_mapping.md
+- [x] Modify get_data to retry yf.download on YFRateLimitError
+- [x] Increase max_retries to 5
+- [x] Add check in main loop to skip if data.empty
+- [x] Increase sleep in main loop to 2 seconds
+- [x] Update TODO after completion
+- [x] Use S&P 500 tickers data from SP500.csv in algorithmic_trading_ml.py and sample.py
