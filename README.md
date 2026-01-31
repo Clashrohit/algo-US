@@ -127,4 +127,4 @@ MIT — see `LICENSE`.
 
 ---
 
-> Need the README in Tamil or want me to add a `requirements.txt` / CI workflow (`.github/workflows`) next? Say the word and I’ll add it. ✅
+
