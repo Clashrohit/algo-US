@@ -1,0 +1,11 @@
+symbol,company,Sector,date,prob_buy,signal,final_action
+ACN,Accenture plc,Information Technology,2023-12-21,0.459,0,HOLD (signal=0)
+AAL,American Airlines Group,Industrials,2023-12-21,0.4587,0,HOLD (signal=0)
+ALK,Alaska Air Group Inc,Industrials,2023-12-21,0.4614,0,HOLD (signal=0)
+ARE,Alexandria Real Estate Equities Inc,Real Estate,2023-12-21,0.4652,0,HOLD (signal=0)
+AME,AMETEK Inc,Industrials,2023-12-21,0.4537,0,HOLD (signal=0)
+AMP,Ameriprise Financial,Financials,2023-12-21,0.4525,0,HOLD (signal=0)
+AMGN,Amgen Inc,Health Care,2023-12-21,0.451,0,HOLD (signal=0)
+AMZN,Amazon.com Inc,Consumer Discretionary,2023-12-21,0.4707,0,HOLD (signal=0)
+AWK,American Water Works Company Inc,Utilities,2023-12-21,0.4477,0,HOLD (signal=0)
+AAP,Advance Auto Parts,Consumer Discretionary,2023-12-21,0.4772,0,HOLD (signal=0)

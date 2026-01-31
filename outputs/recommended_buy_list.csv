@@ -1,0 +1,7 @@
+symbol,company,Sector,date,prob_buy,signal,final_action
+ALB,Albemarle Corp,Materials,2023-12-21,0.5629,1,BUY (signal=1)
+APD,Air Products & Chemicals Inc,Materials,2023-12-21,0.5418,1,BUY (signal=1)
+AEE,Ameren Corp,Utilities,2023-12-21,0.5353,1,BUY (signal=1)
+LNT,Alliant Energy Corp,Utilities,2023-12-21,0.5312,1,BUY (signal=1)
+ABBV,AbbVie Inc.,Health Care,2023-12-21,0.526,1,BUY (signal=1)
+AKAM,Akamai Technologies Inc,Information Technology,2023-12-21,0.5216,1,BUY (signal=1)

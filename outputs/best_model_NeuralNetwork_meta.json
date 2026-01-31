@@ -1,0 +1,12 @@
+{
+  "best_name": "NeuralNetwork",
+  "feature_cols": [
+    "MA20_MA50",
+    "RSI",
+    "MACD",
+    "BB_upper",
+    "OBV",
+    "ICHIMOKU_base",
+    "Regime"
+  ]
+}

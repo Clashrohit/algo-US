@@ -1,0 +1,8 @@
+symbol,company,Sector,date,prob_buy,signal,final_action
+GOOG,Alphabet Inc Class C,Information Technology,2023-12-21,0.2412,-1,SELL/EXIT (signal=-1)
+GOOGL,Alphabet Inc Class A,Information Technology,2023-12-21,0.2429,-1,SELL/EXIT (signal=-1)
+ADBE,Adobe Systems Inc,Information Technology,2023-12-21,0.2552,-1,SELL/EXIT (signal=-1)
+AMT,American Tower Corp A,Real Estate,2023-12-21,0.3564,-1,SELL/EXIT (signal=-1)
+AMD,Advanced Micro Devices Inc,Information Technology,2023-12-21,0.3675,-1,SELL/EXIT (signal=-1)
+AYI,Acuity Brands Inc,Industrials,2023-12-21,0.3966,-1,SELL/EXIT (signal=-1)
+APH,Amphenol Corp,Information Technology,2023-12-21,0.3997,-1,SELL/EXIT (signal=-1)

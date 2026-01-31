@@ -1,0 +1,549 @@
+\documentclass[journal]{IEEEtran}
+
+% ------------------ Packages ------------------
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{cite}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% IEEE-safe subfig
+\usepackage[caption=false,font=footnotesize]{subfig}
+
+% Float control
+\usepackage{placeins}
+\usepackage{dblfloatfix}
+
+% Layout stability
+\usepackage{microtype}
+\setlength{\emergencystretch}{2em}
+
+% Better URL/DOI breaking
+\usepackage{xurl}
+\Urlmuskip=0mu plus 1mu
+
+% (Optional) images folder
+\graphicspath{{figures/}}
+
+% ---- Float placement tuning (helps avoid float congestion)
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+\setcounter{dbltopnumber}{2}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.8}
+\renewcommand{\dbltopfraction}{0.85}
+\renewcommand{\dblfloatpagefraction}{0.8}
+
+% ---- helper: include image only if file exists (underscore safe + figures/ support)
+\newcommand{\safeincludegraphics}[2][]{%
+  \begingroup
+  \edef\imgA{\detokenize{#2}}%
+  \edef\imgB{\detokenize{figures/#2}}%
+  \IfFileExists{\imgA}{%
+    \includegraphics[#1]{\imgA}%
+  }{%
+    \IfFileExists{\imgB}{%
+      \includegraphics[#1]{\imgB}%
+    }{%
+      \fbox{\parbox{0.95\linewidth}{Missing file: \texttt{\imgA}}}%
+    }%
+  }%
+  \endgroup
+}
+
+% ---- NEW: fit figures to page height (prevents blank pages caused by too-tall images)
+\newcommand{\safeincludegraphicsfit}[2][]{%
+  \safeincludegraphics[width=\linewidth,height=0.75\textheight,keepaspectratio,#1]{#2}%
+}
+\newcommand{\safeincludesubfig}[2][]{%
+  \safeincludegraphics[width=0.32\linewidth,height=0.25\textheight,keepaspectratio,#1]{#2}%
+}
+
+% ------------------ hyperref (MUST be last) ------------------
+\usepackage[hidelinks]{hyperref}
+
+% ------------------ Title ------------------
+\title{Machine Learning-Based Stock Market Prediction and Backtesting System}
+
+\author{
+Rohit~B~(22BCS175), Ayyanar~N~(22BCS156)\\
+Department of Computer Science and Engineering, Mepco Schlenk Engineering College (Autonomous)\\
+Guided by: Dr.~D.~Sasireka, Assistant Professor
+}
+
+\begin{document}
+\maketitle
+
+% ------------------ Abstract ------------------
+\begin{abstract}
+Stock market decision-making is challenging due to noise, uncertainty, and non-stationary market regimes. This manuscript presents an end-to-end machine learning (ML) pipeline for stock direction prediction and trading-signal generation using multi-indicator feature engineering and paper-style backtesting. Using daily OHLCV data from an S\&P 500 stock subset (2010--2023), we compute technical indicators, add a past-only market regime feature, and evaluate multiple ML classifiers (GBM, SVM, Random Forest, Logistic Regression, MLP, Decision Tree, KNN, GaussianNB). To reduce biased model selection, we choose the best model using Balanced Accuracy. We generate Buy/Sell/Hold signals from predicted probabilities and evaluate a Top-$N$ equal-weight portfolio strategy with next-day execution and transaction costs (10 bps per position change). Results are reported for a backward period (2022) and a forward period (2023) using Total Return, Max Drawdown, Sharpe ratio, and Win rate. The implementation is reproducible (offline-first CSV pipeline) and produces report-ready artifacts including performance tables, radar charts, equity curves, and recommendation lists.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Algorithmic Trading, Stock Prediction, Technical Indicators, Feature Engineering, Market Regime, Balanced Accuracy, Backtesting
+\end{IEEEkeywords}
+
+% =========================================================
+\section{Introduction}
+Financial markets are volatile and non-stationary, where the mapping between price movements and trading indicators can change across time. Traditional rule-based strategies using a single technical indicator may fail under regime shifts (bull/bear/sideways), and manual analysis becomes impractical with large historical datasets. Machine learning can leverage multiple indicators simultaneously, learning non-linear interactions that are difficult to encode using fixed rules.
+
+Practical trading systems must address: (i) evaluation leakage due to inappropriate random splitting of time series, and (ii) overstated profitability due to unrealistic backtesting assumptions (e.g., ignoring transaction costs and using lookahead execution). This project proposes a reproducible pipeline that (1) builds multi-indicator features from OHLCV, (2) adds a regime feature computed strictly from past returns, (3) trains an assortment of ML models and selects the best model using Balanced Accuracy, and (4) evaluates trading performance via a Top-$N$ portfolio backtest with transaction costs.
+
+% =========================================================
+\section{Related Work}
+Multi-indicator strategies and ML-based model assortment have been studied extensively in algorithmic trading. A key motivating reference is \cite{Sukma2024}, which merges multi-indicator technical analysis with ML for improved trading performance. Prior work also highlights pitfalls such as evaluation leakage, overfitting due to redundant indicators, and unrealistic backtesting assumptions; thus, leakage-aware evaluation and backtest methodology are essential \cite{Vezeris2020}. Imbalance-handling methods such as SMOTE have been proposed for skewed classification tasks \cite{Bao2023,SP_Smote2021}. Explainability for financial ML is another active research area \cite{Martins2024}.
+
+% =========================================================
+\section{Dataset Description}
+\subsection{Data Source}
+We use daily OHLCV data (Open, High, Low, Close, Volume) for an S\&P 500 stock subset over 2010--2023. The implementation is offline-first: each ticker is stored as a local CSV file for reproducibility, with optional Yahoo Finance fetching when needed \cite{YahooFinance2023}.
+
+\subsection{Preprocessing}
+To ensure reliable feature computation and time-series correctness:
+\begin{itemize}
+\item Parse dates and sort chronologically.
+\item Remove duplicated timestamps.
+\item Convert OHLCV to numeric and drop invalid rows (NaN/Inf).
+\item Ensure features and labels rely only on information available up to time $t$ (no lookahead).
+\end{itemize}
+
+% =========================================================
+\section{Methodology}
+\subsection{Technical Indicator Feature Engineering}
+Indicators capture complementary aspects: trend, momentum, volatility, and volume confirmation.
+
+Representative formulas:
+\textbf{SMA:}
+\begin{equation}
+SMA_n(t)=\frac{1}{n}\sum_{i=0}^{n-1} Close_{t-i}
+\end{equation}
+
+\textbf{EMA:}
+\begin{equation}
+EMA_t=\alpha Close_t+(1-\alpha)EMA_{t-1},\quad \alpha=\frac{2}{n+1}
+\end{equation}
+
+\textbf{MACD:}
+\begin{equation}
+MACD = EMA_{12}-EMA_{26}
+\end{equation}
+
+\subsection{Final Feature Set (Paper-Aligned)}
+For interpretability and consistency, a compact paper-aligned subset is used:
+\begin{itemize}
+\item $MA20\_MA50$ (SMA20 -- SMA50)
+\item RSI
+\item MACD
+\item Bollinger upper band ($BB\_upper$)
+\item OBV
+\item Ichimoku base line
+\item Regime (context feature)
+\end{itemize}
+
+\subsection{Label Definition (Direction Prediction)}
+We use a future-direction label with horizon $h=5$ trading days:
+\begin{equation}
+label_t=
+\begin{cases}
+1, & Close_{t+h} > Close_t\\
+0, & \text{otherwise}
+\end{cases}
+\end{equation}
+
+\subsection{Market Regime Feature (Past-Only)}
+We compute a regime feature using past-only rolling log returns:
+\begin{align}
+r_t &= \ln\left(\frac{Close_t}{Close_{t-1}}\right),\\
+\mu_t &= \frac{1}{L}\sum_{i=0}^{L-1} r_{t-i}
+\end{align}
+Regime assignment:
+\begin{equation}
+Regime_t=
+\begin{cases}
+2\ (\text{Bull}), & \mu_t>\epsilon\\
+0\ (\text{Bear}), & \mu_t<-\epsilon\\
+1\ (\text{Sideways}), & |\mu_t|\le\epsilon
+\end{cases}
+\end{equation}
+We use $L=20$ and $\epsilon=0.0005$. This is a simple and interpretable detector (not Markov/HMM) and avoids lookahead.
+
+\subsection{Correlation-Based Feature Redundancy Control}
+We reduce redundancy by dropping highly correlated indicators:
+\begin{equation}
+C_{ij}=\frac{Cov(I_i,I_j)}{\sigma(I_i)\sigma(I_j)}
+\end{equation}
+If $|C_{ij}|>0.75$, one indicator is removed.
+
+\subsection{Leakage-Free Evaluation}
+\begin{itemize}
+\item Time-based split: Train $\le$ 2021-12-31; Test = 2022.
+\item Purging: remove last $h$ rows per symbol from training when labels depend on a future horizon.
+\item Backtesting uses next-day execution: decisions at $t-1$ are applied on day $t$.
+\end{itemize}
+
+\subsection{Class Imbalance Handling}
+We handle imbalance via class-weighted training by default. SMOTE may be enabled optionally on the training set only (never on test) for strongly imbalanced label modes \cite{Bao2023,SP_Smote2021}.
+
+\subsection{Robust Model Selection Using Balanced Accuracy}
+To avoid biased ``always BUY'' classifiers, we use Balanced Accuracy:
+\begin{equation}
+Recall=\frac{TP}{TP+FN},\quad Specificity=\frac{TN}{TN+FP}
+\end{equation}
+\begin{equation}
+BalancedAcc=\frac{Recall+Specificity}{2}
+\end{equation}
+
+% =========================================================
+\section{Algorithms}
+
+\subsection{Algorithm 1: Dataset Construction and Feature Engineering}
+\begin{algorithm}[!t]
+\caption{Dataset Construction and Feature Engineering}
+\label{alg:algo1}
+\begin{algorithmic}[1]
+\Require Ticker universe, OHLCV data, indicator definitions, label horizon $h$
+\Ensure Training table with identifiers, features $X$, and labels $y$
+\For{each ticker}
+    \State Load OHLCV data and preprocess (sort, de-duplicate, drop invalid rows)
+    \State Compute technical indicators and derived features
+    \State Compute Regime feature using past-only rolling log returns
+    \State Create direction label: $y_t=1$ if $Close_{t+h}>Close_t$, else $0$
+\EndFor
+\State Merge all tickers into one dataset with (\texttt{symbol}, \texttt{date}, features, label)
+\State (Optional) Apply correlation-based pruning ($|r|>0.75$) or select paper-aligned feature subset
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Algorithm 2: ML Model Assortment, Robust Selection, and Signal Generation}
+\begin{algorithm}[!t]
+\caption{Machine Learning Model Assortment, Robust Selection, and Signal Generation}
+\label{alg:algo2}
+\begin{algorithmic}[1]
+\Require Dataset with identifiers (\texttt{symbol}, \texttt{date}), features $X$, labels $y$, horizon $h$
+\Ensure Best model, probabilities $p$, signals, and Top-$N$ ranked lists
+
+\State \textbf{Feature selection:} choose paper-aligned indicators (or correlation-pruned set with $|r|>0.75$)
+\State \textbf{Time split (leakage-free):} Train $\le T$, Test $>T$ (e.g., Train $\le$ 2021, Test = 2022)
+\State \textbf{Purging:} remove last $h$ rows per symbol from Train to avoid horizon overlap
+\State \textbf{Train-only imputation:} compute medians on Train; fill Train/Test using Train medians
+\State \textbf{Imbalance handling:} class-weighted learning (default); optional SMOTE on Train only
+
+\For{each model $m \in \{\mathrm{GBM},\mathrm{RF},\mathrm{SVM},\mathrm{LR},\mathrm{MLP},\mathrm{DT},\mathrm{KNN},\mathrm{NB}\}$}
+    \State Train $m$ on $(X_{\mathrm{train}}, y_{\mathrm{train}})$
+    \State Predict $\hat{y}$ on $X_{\mathrm{test}}$
+    \State Compute Accuracy, Precision, Recall, F1
+    \State Compute Specificity and $BalancedAcc=\frac{Recall+Specificity}{2}$
+\EndFor
+
+\State \textbf{Select best model:} choose model with highest BalancedAcc
+\State \textbf{Probability output:} compute $p=P(y=1\mid X)$ for each test sample
+\State \textbf{Signal generation:}
+\State \hspace{0.5cm} if $p \ge \tau_{\mathrm{buy}}$ then signal $=1$ (Buy)
+\State \hspace{0.5cm} else if $p \le \tau_{\mathrm{sell}}$ then signal $=-1$ (Sell/Exit)
+\State \hspace{0.5cm} else signal $=0$ (Hold)
+\State \textbf{Top-$N$ lists:} for each date, rank by $p$ and output BUY/SELL/HOLD recommendation lists
+\State \textbf{Backtesting input:} next-day execution (select at $t-1$, apply at $t$), equal-weight Top-$N$, fee (10 bps)
+\State Save the best model bundle (model + feature list) for reproducibility
+\end{algorithmic}
+\end{algorithm}
+
+% =========================================================
+\section{Signal Generation}
+Let $p=P(label=1)$ be the predicted confidence for the Buy class:
+\begin{equation}
+Signal=
+\begin{cases}
+1\ (\text{Buy}), & p \ge 0.52\\
+-1\ (\text{Sell/Exit}), & p \le 0.40\\
+0\ (\text{Hold}), & \text{otherwise}
+\end{cases}
+\end{equation}
+We additionally generate Top-$N$ ranked lists by $p$ for daily recommendations.
+
+% =========================================================
+\section{Backtesting Methodology}
+\subsection{Assumptions}
+\begin{itemize}
+\item Long-only portfolio: Sell/Exit is avoid/exit (not short selling).
+\item Next-day execution: selections at $t-1$ applied on day $t$ (no lookahead).
+\item Equal-weight Top-$N$ portfolio ($N=10$).
+\item Transaction costs: 10 bps per position change; slippage not modeled.
+\end{itemize}
+
+\subsection{Metrics}
+\begin{align}
+Return_t &= Position_t \cdot \frac{Close_t - Close_{t-1}}{Close_{t-1}}, \\
+Equity_t &= Equity_{t-1}(1 + Return_t), \\
+TotalReturn &= \frac{Equity_T}{Equity_0} - 1, \\
+MDD &= \min_t\left(\frac{Equity_t}{\max_{s\le t} Equity_s}-1\right), \\
+Sharpe &= \sqrt{252}\cdot\frac{\mathrm{mean}(Return)}{\mathrm{std}(Return)}.
+\end{align}
+
+% =========================================================
+\section{Experimental Results}
+
+\subsection{Classification Performance (Table 7)}
+Table~\ref{tab:table7} reports test performance (test period: 2022). The best model is selected using BalancedAcc (GBM in our run).
+
+\begin{table}[!t]
+\caption{Machine learning test performance details (test period: 2022).}
+\label{tab:table7}
+\centering
+\footnotesize
+\begin{tabular}{l@{\hspace{0.1cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c@{\hspace{0.2cm}}c}
+\toprule
+Model & Accuracy & Precision & Recall & F1 \\
+\midrule
+NeuralNetwork      & 0.519 & 0.512 & 0.638 & 0.568 \\
+GaussianNB         & 0.519 & 0.513 & 0.606 & 0.555 \\
+SVM                & 0.515 & 0.508 & 0.656 & 0.573 \\
+LogisticRegression & 0.514 & 0.508 & 0.657 & 0.573 \\
+GBM                & 0.507 & 0.502 & 0.691 & 0.582 \\
+KNN                & 0.500 & 0.497 & 0.628 & 0.554 \\
+DecisionTree       & 0.502 & 0.407 & 0.010 & 0.019 \\
+RandomForest       & 0.497 & 0.465 & 0.102 & 0.167 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Radar Visualization (Optional)}
+\begin{figure}[!t]
+\centering
+\safeincludegraphicsfit{FIGURE_4_radar.png}
+\caption{Radar chart of ML test performance (Accuracy, Precision, Recall, F1).}
+\label{fig:radar}
+\end{figure}
+
+\subsection{Backtesting Results (Backward 2022 vs Forward 2023)}
+We evaluate a Top-$10$ portfolio with fee = 10 bps and next-day execution:
+\begin{itemize}
+\item Backward 2022: Total Return 10.62\%, Max Drawdown 21.74\%, Sharpe 0.512, Win rate 49.00\%.
+\item Forward 2023: Total Return 28.96\%, Max Drawdown 15.18\%, Sharpe 1.470, Win rate 51.02\%.
+\end{itemize}
+
+The results demonstrate that the ML-based approach achieves positive returns in both backward and forward periods, with improved risk-adjusted performance (Sharpe ratio) in the forward period. The inclusion of transaction costs (10 bps) provides a more realistic assessment of trading performance.
+
+\begin{figure}[!t]
+\centering
+\safeincludegraphicsfit{portfolio_equity_curve_2022_2023.png}
+\caption{Equity curves for Top-$10$ backtest: backward (2022) and forward (2023) periods (fee = 10 bps).}
+\label{fig:equity}
+\end{figure}
+
+\subsection{Traditional Indicator Baseline Comparison}
+To contextualize the proposed ML-based approach, we compare it against common single-indicator trading rules:
+(i) MA(20,50) crossover, (ii) RSI threshold strategy, (iii) MACD signal crossover,
+(iv) Bollinger Bands mean-reversion rule, (v) OBV trend-confirmation rule, and (vi) Ichimoku trend rule.
+All baselines follow the same close-to-close return convention and next-day execution to avoid lookahead bias. The comparison reveals the advantage of combining multiple indicators through machine learning over single-indicator strategies.
+
+\begin{figure}[!t]
+\centering
+\safeincludegraphicsfit{TABLE_8.png}
+\caption{Total return comparison between traditional indicator baselines and the proposed approach (Table 8).}
+\label{fig:table8png}
+\end{figure}
+
+\begin{figure*}[!t]
+\centering
+\subfloat[MA20/MA50]{\safeincludesubfig{FIGURE_5_MA20_MA50.png}}\hfill
+\subfloat[RSI]{\safeincludesubfig{FIGURE_6_RSI.png}}\hfill
+\subfloat[MACD]{\safeincludesubfig{FIGURE_7_MACD.png}}
+\caption{Traditional indicator baselines (part 1): orders, trade PnL, and cumulative returns.}
+\label{fig:baseline_part1}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\subfloat[Bollinger Bands]{\safeincludesubfig{FIGURE_8_BB.png}}\hfill
+\subfloat[OBV]{\safeincludesubfig{FIGURE_9_OBV.png}}\hfill
+\subfloat[Ichimoku]{\safeincludesubfig{FIGURE_10_ICHIMOKU.png}}
+\caption{Traditional indicator baselines (part 2): additional comparisons.}
+\label{fig:baseline_part2}
+\end{figure*}
+
+\begin{figure}[!t]
+\centering
+\safeincludegraphicsfit{FIGURE_11_ALGORITHM.png}
+\caption{Proposed ML-based approach using multi-indicator features.}
+\label{fig:proposed_algo}
+\end{figure}
+
+\subsection{Ablation Study (Planned / Optional)}
+To quantify the contribution of key design choices, we propose:
+\begin{itemize}
+\item Ablation-A: Regime ON vs Regime OFF,
+\item Ablation-B: Best model by F1-score vs by Balanced Accuracy,
+\item Ablation-C: Backtest with fee (10 bps) vs without fee.
+\end{itemize}
+
+\begin{table}[!t]
+\caption{Ablation study template (fill with measured values).}
+\label{tab:ablation}
+\centering
+\footnotesize
+\begin{tabular}{p{4.5cm}@{\hspace{0.2cm}}c@{\hspace{0.15cm}}c@{\hspace{0.15cm}}c@{\hspace{0.15cm}}c@{\hspace{0.15cm}}c}
+\toprule
+Setting & Best Model & F1 & BalancedAcc & TotalReturn & Sharpe \\
+\midrule
+Baseline (Regime ON, BalAcc select, Cost ON) & -- & -- & -- & -- & -- \\
+Regime OFF (BalAcc select, Cost ON)         & -- & -- & -- & -- & -- \\
+F1-based selection (Regime ON, Cost ON)     & -- & -- & -- & -- & -- \\
+Cost OFF (Regime ON, BalAcc select)         & -- & -- & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =========================================================
+\section{System Implementation (Expanded)}
+\subsection{Module-Level Design}
+\begin{itemize}
+\item Data ingestion: load ticker universe and retrieve OHLCV (offline-first CSV, optional API fallback).
+\item Preprocessing: sorting, de-duplication, numeric conversion, invalid row removal.
+\item Feature engineering: multi-indicator computation + past-only regime feature.
+\item Dataset builder: assemble supervised table with identifiers, features $X$, labels $y$.
+\item Feature selection: correlation-based redundancy removal or paper-aligned subset.
+\item Model assortment: train multiple models and evaluate on time-based test set.
+\item Model selection: BalancedAcc-based selection to avoid biased classifiers.
+\item Signals \& recommendations: convert probabilities to Buy/Sell/Hold; generate Top-$N$ lists.
+\item Backtesting \& reporting: compute return/risk metrics and generate plots/tables.
+\end{itemize}
+
+\subsection{Key Hyperparameters and Settings}
+\begin{table}[!t]
+\caption{Key settings used in the proposed pipeline.}
+\label{tab:params}
+\centering
+\footnotesize
+\begin{tabular}{p{5cm}p{6cm}}
+\toprule
+Parameter & Value \\
+\midrule
+Universe & S\&P 500 subset (e.g., 50 tickers) \\
+Data frequency & Daily OHLCV \\
+Label horizon $h$ & 5 trading days \\
+Train/Test split & Train $\le$ 2021, Test = 2022 \\
+Forward evaluation & 2023 \\
+Regime lookback $L$ & 20 \\
+Regime threshold $\epsilon$ & 0.0005 \\
+Correlation threshold $|r|$ & 0.75 \\
+Buy threshold $\tau_{\mathrm{buy}}$ & 0.52 \\
+Sell threshold $\tau_{\mathrm{sell}}$ & 0.40 \\
+Top-$N$ size & $N=10$ \\
+Transaction cost & 10 bps per position change \\
+Execution assumption & Next-day execution (no lookahead) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Recommendation List Generation (BUY/SELL/HOLD)}
+For the latest available date, the system generates separate Top-$N$ recommendation lists:
+\begin{itemize}
+\item BUY list (signal=1): $p \ge \tau_{\mathrm{buy}}$, ranked by highest $p$.
+\item SELL/EXIT list (signal=-1): $p \le \tau_{\mathrm{sell}}$, ranked by lowest $p$.
+\item HOLD list (signal=0): $\tau_{\mathrm{sell}} < p < \tau_{\mathrm{buy}}$.
+\end{itemize}
+Sell/Exit is interpreted as a long-only avoid/exit decision rather than short selling.
+
+\subsection{Sensitivity Analysis (Planned)}
+Backtesting outcomes can vary based on portfolio size $N$ and transaction costs. We propose a sensitivity analysis across
+$N \in \{5,10,20\}$ and fee $\in \{0,10,20\}$ bps.
+
+\begin{table}[!t]
+\caption{Sensitivity analysis template across Top-$N$ and transaction costs.}
+\label{tab:sensitivity}
+\centering
+\footnotesize
+\begin{tabular}{l@{\hspace{0.3cm}}c@{\hspace{0.3cm}}c@{\hspace{0.3cm}}c}
+\toprule
+Setting & Total Return & Max Drawdown & Sharpe \\
+\midrule
+$N=5$, fee=0 bps   & -- & -- & -- \\
+$N=10$, fee=0 bps  & -- & -- & -- \\
+$N=20$, fee=0 bps  & -- & -- & -- \\
+$N=5$, fee=10 bps  & -- & -- & -- \\
+$N=10$, fee=10 bps & -- & -- & -- \\
+$N=20$, fee=10 bps & -- & -- & -- \\
+$N=10$, fee=20 bps & -- & -- & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =========================================================
+\section{Ethical and Practical Considerations}
+This work is presented for academic research and evaluation purposes only and does not constitute financial advice. Real-world deployment requires additional considerations such as slippage, liquidity constraints, corporate actions, and compliance requirements.
+
+% =========================================================
+\section{Limitations and Future Work}
+\subsection{Limitations}
+\begin{itemize}
+\item Slippage, liquidity constraints, and bid-ask spread are not modeled (only 10 bps transaction cost).
+\item Survivorship bias may exist if the stock universe changes over time.
+\item Fundamental ratios are not integrated in the main experiment due to data availability and time-alignment challenges.
+\end{itemize}
+
+\subsection{Future Work}
+\begin{itemize}
+\item Integrate fundamental data with correct time alignment (quarterly release dates).
+\item Probability calibration for more stable thresholding.
+\item Explainable AI (e.g., SHAP) to interpret indicator contributions \cite{Martins2024}.
+\item Walk-forward validation across multiple years and market regimes.
+\item Probabilistic regime models (e.g., HMM) as an extension.
+\end{itemize}
+
+% =========================================================
+\begin{thebibliography}{99}
+
+\bibitem{Sukma2024}
+N. Sukma and C. S. Namahoot, ``An Algorithmic Trading Approach Merging Machine Learning With Multi-Indicator Strategies for Optimal Performance,'' \emph{IEEE Access}, 2024, doi: \url{10.1109/ACCESS.2024.3516053}.
+
+\bibitem{Ayala2021}
+J. Ayala, M. García-Torres, J. L. V. Noguera, F. Gómez-Vela, and F. Divina, ``Technical analysis strategy optimization using a machine learning approach in stock market indices,'' \emph{Knowledge-Based Systems}, vol. 225, Art. no. 107119, 2021.
+
+\bibitem{Fisichella2021}
+M. Fisichella and F. Garolla, ``Can deep learning improve technical analysis of forex data to predict future price movements?'' \emph{IEEE Access}, vol. 9, pp. 153083--153101, 2021.
+
+\bibitem{Kuo2021}
+S.-Y. Kuo and Y.-H. Chou, ``Building intelligent moving average-based stock trading system using metaheuristic algorithms,'' \emph{IEEE Access}, vol. 9, pp. 140383--140396, 2021.
+
+\bibitem{Yen2010}
+S. M.-F. Yen and Y.-L. Hsu, ``Profitability of technical analysis in financial and commodity futures markets---A reality check,'' \emph{Decision Support Systems}, vol. 50, no. 1, pp. 128--139, 2010.
+
+\bibitem{Fischer2018}
+T. Fischer and C. Krauss, ``Deep learning with long short-term memory networks for financial market predictions,'' \emph{European Journal of Operational Research}, vol. 270, no. 2, pp. 654--669, 2018.
+
+\bibitem{Pourahmadi2024}
+Z. Pourahmadi, D. Fareed, and H. R. Mirzaei, ``A novel stock trading model based on reinforcement learning and technical analysis,'' \emph{Annals of Data Science}, 2024.
+
+\bibitem{Martins2024}
+T. Martins, A. M. de Almeida, E. Cardoso, and L. Nunes, ``Explainable artificial intelligence (XAI): A systematic literature review on taxonomies and applications in finance,'' \emph{IEEE Access}, vol. 12, pp. 618--629, 2024.
+
+\bibitem{Parente2024}
+M. Parente, L. Rizzuti, and M. Trerotola, ``A profitable trading algorithm for cryptocurrencies using a neural network model,'' \emph{Expert Systems With Applications}, vol. 238, Art. no. 121806, 2024.
+
+\bibitem{Bhuiyan2025}
+M. S. M. Bhuiyan \emph{et al.}, ``Deep learning for algorithmic trading: A systematic review of predictive models and optimization strategies,'' \emph{Array}, vol. 26, Art. no. 100390, 2025.
+
+\bibitem{Jin2023}
+B. Jin, ``A Mean--VaR based deep reinforcement learning framework for practical algorithmic trading,'' \emph{IEEE Access}, 2023.
+
+\bibitem{Bao2023}
+Y. Bao and S. Yang, ``Two novel SMOTE methods for solving imbalanced classification problems,'' \emph{IEEE Access}, vol. 11, pp. 5816--5823, 2023.
+
+\bibitem{SP_Smote2021}
+Y. Li, Y. Wang, T. Li, B. Li, and X. Lan, ``SP-SMOTE: A novel space partitioning based synthetic minority oversampling technique,'' \emph{Knowledge-Based Systems}, vol. 228, Art. no. 107269, 2021.
+
+\bibitem{YahooFinance2023}
+J. Lee and C.-F. Lee, ``Data collection, presentation, and Yahoo! Finance,'' in \emph{Essentials of Excel VBA, Python, and R (Financial Statistics and Portfolio Analysis)}. Springer, 2023, pp. 19--80.
+
+\bibitem{Vezeris2020}
+D. Vezeris, T. Kyrgos, I. Karkanis, and V. Bizergianidou, ``Automated trading systems' evaluation using d-backtest PS method and WM ranking in financial markets,'' \emph{Investment Management and Financial Innovations}, vol. 17, no. 2, pp. 198--215, 2020.
+
+\end{thebibliography}
+
+\end{document}

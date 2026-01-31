@@ -1,0 +1,9 @@
+Model,Accuracy,Precision,Recall,F1
+GBM,1.0,1.0,1.0,1.0
+SVM,1.0,1.0,1.0,1.0
+RandomForest,1.0,1.0,1.0,1.0
+LogisticRegression,1.0,1.0,1.0,1.0
+NeuralNetwork,1.0,1.0,1.0,1.0
+DecisionTree,1.0,1.0,1.0,1.0
+KNN,1.0,1.0,1.0,1.0
+GaussianNB,1.0,1.0,1.0,1.0

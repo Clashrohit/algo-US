@@ -1,0 +1,17 @@
+{
+  "best_name": "GaussianNB",
+  "feature_cols": [
+    "MA20_MA50",
+    "RSI",
+    "MACD",
+    "BB_upper",
+    "OBV",
+    "ICHIMOKU_base"
+  ],
+  "split_strategy": "paper_holdout",
+  "train_end_date": "2021-12-31",
+  "test_start_date": "2022-01-01",
+  "test_end_date": "2022-12-31",
+  "horizon_days": 5,
+  "sort_by": "BalancedAcc"
+}
