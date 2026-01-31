@@ -1,17 +1,88 @@
-# algo-US
+# algo-US 🚀
 
-This repository contains an algorithmic trading research project for US equities.
+**Algorithmic trading research project for US equities.** This repo contains code to build datasets, select features, train models, and run backtests used to generate figures and tables for analysis and reports.
 
-Contents
-- Python scripts for dataset building, feature selection, model training and backtesting
-- `data/` and `outputs/` folders are excluded from Git (see `.gitignore`) and contain large data and results
+---
 
-Quick start
-1. Create and activate a Python virtual environment
-2. Install dependencies (if any)
-3. Run `main.py` or `run_backtest_paperstyle.py` to reproduce experiments
+## 📌 Highlights
 
-Notes
-- Sensitive or large files (prices, outputs) are intentionally excluded from the repository. If you want to include sample data, add a small sample CSV to `data/` and update `.gitignore` accordingly.
+- Clean, reproducible scripts for data preparation, feature engineering, modelling and backtesting
+- Reproducible experiments: see `main.py`, `run_backtest_paperstyle.py` and `backtest.py`
+- Outputs (figures, datasets, model artifacts) saved to the `outputs/` folder
 
-License: MIT (see `LICENSE`)
+---
+
+## 🧭 Quickstart
+1. Create a Python virtual environment:
+
+```bash
+python -m venv .venv
+# Windows
+.\.venv\Scripts\activate
+# macOS / Linux
+source .venv/bin/activate
+```
+
+2. Install dependencies (if you maintain `requirements.txt`):
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Reproduce a backtest / generate outputs:
+
+```bash
+python run_backtest_paperstyle.py
+# or
+python main.py
+```
+
+Outputs will be written into `outputs/`.
+
+---
+
+## 📁 Data
+- `data/prices/` holds historical price CSVs (one file per ticker). These are large and not strictly required to run the code if you provide a smaller sample.
+- If you do not want to commit large raw data to GitHub, consider:
+  - Using Git LFS for large files (recommended)
+  - Storing large datasets in external storage (Google Drive, S3, Zenodo) and providing download scripts
+
+---
+
+## ⚠️ Notes on large files
+Two files in `outputs/` currently exceed GitHub's recommended 50 MB size. If you plan to keep large files in the repo long-term, convert them to Git LFS:
+
+```bash
+# install git-lfs
+git lfs install
+# track CSV outputs
+git lfs track "outputs/*.csv"
+git add .gitattributes
+# migrate existing big files (history rewrite)
+git lfs migrate import --include="outputs/timeseries_dataset.csv,outputs/trading_signals_best_model.csv"
+# force-push rewritten history
+git push --force origin main
+```
+
+Be careful: migrating rewrites history and requires coordination with collaborators.
+
+---
+
+## 🧪 Reproducibility & Tips
+- Set random seeds where applicable for deterministic model training.
+- Keep dataset and model configs in `config.py` for easy experiment tracking.
+- Use the `outputs/` folder to store results; don't rely on committing intermediate large files.
+
+---
+
+## 🤝 Contributing
+Contributions are welcome. Please open issues or pull requests with clear descriptions and tests or reproducible steps.
+
+---
+
+## 📄 License
+MIT — see `LICENSE`.
+
+---
+
+> Need the README in Tamil or want me to add a `requirements.txt` / CI workflow (`.github/workflows`) next? Say the word and I’ll add it. ✅
